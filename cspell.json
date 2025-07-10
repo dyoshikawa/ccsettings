@@ -1,7 +1,7 @@
 {
   "version": "0.2",
   "language": "en",
-  "words": ["ccsettings", "oxlint", "Filenaming"],
+  "words": ["ccsettings", "oxlint", "Filenaming", "tsgo", "lintstagedrc", "oxlintrc"],
   "ignorePaths": [
     "node_modules",
     "dist",

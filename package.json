@@ -28,24 +28,13 @@
     "lint:biome": "biome check --write .",
     "lint:eslint": "eslint .",
     "lint:oxlint": "oxlint",
-    "lint:type": "tsc --noEmit",
+    "lint:type": "tsgo --noEmit",
     "prepare": "simple-git-hooks",
     "test": "vitest",
     "test:cov": "vitest --coverage"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpx lint-staged"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx,json}": [
-      "secretlint",
-      "cspell --no-must-find-files",
-      "biome format --write",
-      "biome check --write --unsafe"
-    ],
-    "package.json": [
-      "pnpx sort-package-json"
-    ]
   },
   "prettier": "@biomejs/biome",
   "devDependencies": {
