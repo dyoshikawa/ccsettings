@@ -1,12 +1,13 @@
 import { defineConfig } from 'vitest/config'
 
-export default defineConfig({
+const config = defineConfig({
+  resolve: {
+    alias: {
+      '@': new URL('./src', import.meta.url).pathname,
+    },
+  },
   test: {
-    globals: true,
-    environment: 'node',
     coverage: {
-      provider: 'v8',
-      reporter: ['text', 'json', 'html'],
       exclude: [
         'node_modules/**',
         'dist/**',
@@ -14,11 +15,12 @@ export default defineConfig({
         '**/*.config.*',
         '**/.{eslint,mocha,prettier}rc.{js,cjs,yml}',
       ],
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
     },
-  },
-  resolve: {
-    alias: {
-      '@': new URL('./src', import.meta.url).pathname,
-    },
+    environment: 'node',
+    globals: true,
   },
 })
+
+export default config

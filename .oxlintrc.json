@@ -1,0 +1,20 @@
+{
+  "plugins": ["typescript", "import", "unicorn"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn",
+    "style": "off",
+    "pedantic": "off"
+  },
+  "rules": {
+    "eqeqeq": "error",
+    "import/no-cycle": "error",
+    "import/no-default-export": "off",
+    "import/exports-last": "off",
+    "import/prefer-default-export": "off",
+    "no-console": "off",
+    "typescript/no-explicit-any": "warn",
+    "unicorn/filename-case": "off",
+    "unicorn/prefer-node-protocol": "error"
+  }
+}

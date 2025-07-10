@@ -1,12 +1,14 @@
 import { defineConfig } from 'tsup'
 
-export default defineConfig({
+const config = defineConfig({
+  clean: true,
+  dts: true,
   entry: ['src/index.ts'],
   format: ['cjs', 'esm'],
-  dts: true,
-  splitting: false,
-  sourcemap: true,
-  clean: true,
   minify: false,
   shims: true,
+  sourcemap: true,
+  splitting: false,
 })
+
+export default config
