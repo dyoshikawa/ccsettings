@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .mise.toml
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Format check
+        run: pnpm run lint:biome
+
+      - name: Lint
+        run: |
+          pnpm run lint:oxlint
+          pnpm run lint:eslint
+
+      - name: Type check
+        run: pnpm run lint:type
+
+      - name: Test
+        run: pnpm run test:cov
+
+      - name: Build
+        run: pnpm run build
