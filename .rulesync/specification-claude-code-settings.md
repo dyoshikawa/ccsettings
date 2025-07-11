@@ -1,3 +1,10 @@
+---
+root: false
+targets: ["*"]
+description: "Claude Code Settings: permissions.allow と permissions.deny の仕様"
+globs: ["**/*"]
+---
+
 # Claude Code Settings: permissions.allow と permissions.deny の仕様
 
 ## 概要
