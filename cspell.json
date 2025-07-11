@@ -32,7 +32,19 @@
     "rooignore",
     "copilotignore",
     "aiexclude",
-    "claudecode"
+    "claudecode",
+    "dbaeumer",
+    "eamodio",
+    "bashhistory",
+    "commandhistory",
+    "POWERLEVEL",
+    "GITSTATUS",
+    "procps",
+    "dnsutils",
+    "HISTFILE",
+    "dpkg",
+    "powerline",
+    "ccinstall"
   ],
   "ignorePaths": [
     "node_modules",

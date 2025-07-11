@@ -7,7 +7,8 @@
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -183,3 +184,6 @@ dist
 **/.vscode/mcp.json
 **/.gemini/settings.json
 **/.roo/mcp.json
+
+.claude/settings.local.json
+.pnpm-store
