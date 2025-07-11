@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "o3-search": {
+      "command": "npx",
+      "args": ["o3-search-mcp"],
+      "env": {
+        "SEARCH_CONTEXT_SIZE": "medium",
+        "REASONING_EFFORT": "medium"
+      },
+      "targets": ["claudecode", "cursor"]
+    }
+  }
+}

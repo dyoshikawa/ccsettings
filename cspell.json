@@ -31,7 +31,8 @@
     "clineignore",
     "rooignore",
     "copilotignore",
-    "aiexclude"
+    "aiexclude",
+    "claudecode"
   ],
   "ignorePaths": [
     "node_modules",
