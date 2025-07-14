@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "defaultMode": "acceptEdits",
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "Bash(mkdir:*)",
+      "Bash(pnpm install:*)",
+      "Bash(pnpx biome:*)",
+      "Bash(git push:*)",
+      "Bash(pnpm add:*)",
+      "Bash(npm run lint)",
+      "Bash(mv:*)",
+      "Bash(npm run lint:*)",
+      "Bash(oxlint:*)",
+      "Bash(npx oxlint:*)",
+      "Bash(pnpm cspell:*)",
+      "mcp__o3-search__o3-search",
+      "Bash(ls:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ],
+    "deny": []
+  }
+}

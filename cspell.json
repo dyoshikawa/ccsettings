@@ -2,11 +2,11 @@
   "version": "0.2",
   "language": "en",
   "words": [
-    "ccsettings", 
-    "oxlint", 
-    "Filenaming", 
-    "tsgo", 
-    "lintstagedrc", 
+    "ccsettings",
+    "oxlint",
+    "Filenaming",
+    "tsgo",
+    "lintstagedrc",
     "oxlintrc",
     "gibo",
     "fseventsd",
@@ -44,7 +44,12 @@
     "HISTFILE",
     "dpkg",
     "powerline",
-    "ccinstall"
+    "ccinstall",
+    "pytest",
+    "vitest",
+    "pnpm",
+    "acceptEdits",
+    "bypassPermissions"
   ],
   "ignorePaths": [
     "node_modules",
