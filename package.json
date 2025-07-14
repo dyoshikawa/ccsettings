@@ -1,7 +1,7 @@
 {
   "name": "ccsettings",
   "version": "0.0.0",
-  "description": "Claude Code設定テンプレートをプロジェクト単位で適用するCLIツール",
+  "description": "CLI tool to apply Claude Code setting templates on a per-project basis",
   "keywords": [
     "claude",
     "claude-code",

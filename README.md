@@ -1,8 +1,8 @@
 # ccsettings
 
-Claude Code設定テンプレートをプロジェクト単位で適用するCLIツール
+CLI tool to apply Claude Code setting templates on a per-project basis
 
-## インストール
+## Installation
 
 ```bash
 npm install -g ccsettings
@@ -12,70 +12,70 @@ pnpm add -g ccsettings
 yarn global add ccsettings
 ```
 
-## 使い方
+## Usage
 
-### テンプレートを適用
+### Apply Templates
 
-デフォルトテンプレートを適用：
+Apply default template:
 ```bash
 ccsettings apply
 ```
 
-特定のプリセットテンプレートを適用：
+Apply a specific preset template:
 ```bash
 ccsettings apply --template strict
 ```
 
-ローカルファイルからテンプレートを適用：
+Apply template from local file:
 ```bash
 ccsettings apply --file ./my-template.json
 ```
 
-URLからテンプレートを適用：
+Apply template from URL:
 ```bash
 ccsettings apply --url https://example.com/template.json
 ```
 
-### その他のコマンド
+### Other Commands
 
-利用可能なテンプレートを表示：
+List available templates:
 ```bash
 ccsettings list
 ```
 
-現在の設定を表示：
+Show current settings:
 ```bash
 ccsettings show
 ```
 
-### オプション
+### Options
 
-- `--dry-run` - 実際の変更を行わずに結果をプレビュー
-- `--backup` - 変更前の設定をバックアップ
-- `--force` - 確認なしで上書き
+- `--dry-run` - Preview the result without making actual changes
+- `--backup` - Backup settings before making changes
+- `--force` - Overwrite without confirmation
 
-## ビルトインテンプレート
+## Built-in Templates
 
 ### default
-基本的な権限設定。開発に必要な最小限の権限を許可します。
+Basic permission settings. Allows minimal permissions necessary for development.
 
 ### strict
-厳格なセキュリティ設定。コードの読み書きのみを許可し、コマンド実行やWeb取得を禁止します。
+Strict security settings. Only allows reading and writing code, prohibits command execution and web fetching.
 
 ### development
-開発環境向けの緩い設定。ローカル開発に必要な幅広い権限を許可します。
+Relaxed settings for development environments. Allows a wide range of permissions necessary for local development.
 
 ### testing
-テスト実行に特化した設定。テストツールの実行とテストファイルの編集を許可します。
+Specialized settings for test execution. Allows running test tools and editing test files.
 
-## テンプレート形式
+## Template Format
 
-カスタムテンプレートは以下の形式で作成します：
+Create custom templates in the following format:
 
 ```json
 {
   "name": "my-template",
-  "description": "カスタムテンプレートの説明",
+  "description": "Custom template description",
   "settings": {
     "permissions": {
       "allow": [
@@ -93,14 +93,14 @@ ccsettings show
 }
 ```
 
-## マージ戦略
+## Merge Strategy
 
-既存の設定ファイルがある場合、以下のルールでマージされます：
+When existing configuration files are present, merging follows these rules:
 
-1. 配列（allow/deny）は重複を除いてマージ
-2. プリミティブ値（defaultMode）は既存設定を優先
-3. 存在しないフィールドはテンプレートから追加
+1. Arrays (allow/deny) are merged with duplicates removed
+2. Primitive values (defaultMode) prioritize existing settings
+3. Non-existent fields are added from the template
 
-## ライセンス
+## License
 
 MIT

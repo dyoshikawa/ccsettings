@@ -14,29 +14,29 @@ const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8'))
 program
   .name('ccsettings')
   .description(
-    'Claude Code設定テンプレートをプロジェクト単位で適用するCLIツール',
+    'CLI tool to apply Claude Code setting templates on a per-project basis',
   )
   .version(packageJson.version)
 
-// applyコマンド
+// apply command
 program
   .command('apply')
-  .description('テンプレート設定をプロジェクトに適用')
-  .option('-t, --template <name>', 'プリセットテンプレート名', 'default')
-  .option('-f, --file <path>', 'ローカルファイルからテンプレートを読み込み')
-  .option('-u, --url <url>', 'URLからテンプレートを読み込み')
-  .option('--dry-run', '実際の変更を行わずに結果をプレビュー')
-  .option('--backup', '変更前の設定をバックアップ')
-  .option('--force', '確認なしで上書き')
+  .description('Apply template settings to the project')
+  .option('-t, --template <name>', 'Preset template name', 'default')
+  .option('-f, --file <path>', 'Load template from local file')
+  .option('-u, --url <url>', 'Load template from URL')
+  .option('--dry-run', 'Preview the result without making actual changes')
+  .option('--backup', 'Backup settings before making changes')
+  .option('--force', 'Overwrite without confirmation')
   .action(applyCommand)
 
-// listコマンド
+// list command
 program
   .command('list')
-  .description('利用可能なプリセットテンプレートをリスト表示')
+  .description('List available preset templates')
   .action(listCommand)
 
-// showコマンド
-program.command('show').description('現在の設定を表示').action(showCommand)
+// show command
+program.command('show').description('Show current settings').action(showCommand)
 
 program.parse()
