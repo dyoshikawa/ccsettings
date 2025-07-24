@@ -1,24 +1,11 @@
-export interface ClaudeSettings {
-  permissions?: {
-    allow?: string[];
-    deny?: string[];
-    additionalDirectories?: string[];
-    defaultMode?: 'default' | 'acceptEdits' | 'plan' | 'bypassPermissions';
-    disableBypassPermissionsMode?: 'disable';
-  };
-  env?: Record<string, string>;
-  includeCoAuthoredBy?: boolean;
-  cleanupPeriodDays?: number;
-  model?: string;
-  hooks?: Record<string, Record<string, string>>;
-  [key: string]: unknown;
-}
+import type { z } from "zod/mini";
+import { ClaudeSettingsSchema, TemplateSchema } from "../schemas/index.js";
 
-export interface Template {
-  name: string;
-  description: string;
-  settings: ClaudeSettings;
-}
+export type ClaudeSettings = z.infer<typeof ClaudeSettingsSchema> & {
+  [key: string]: unknown;
+};
+
+export type Template = z.infer<typeof TemplateSchema>;
 
 export interface ApplyOptions {
   template?: string;
@@ -30,6 +17,6 @@ export interface ApplyOptions {
 }
 
 export interface TemplateSource {
-  type: 'builtin' | 'file' | 'url';
+  type: "builtin" | "file" | "url";
   value: string;
 }

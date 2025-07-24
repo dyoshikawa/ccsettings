@@ -151,7 +151,7 @@ describe('settings', () => {
     it('should validate settings before writing', async () => {
       const invalidSettings = {
         permissions: {
-          defaultMode: 'invalid-mode',
+          defaultMode: 'invalid-mode' as any,
         },
       } as ClaudeSettings;
 
