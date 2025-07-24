@@ -1,5 +1,5 @@
 {
-	"name": "ghactivities",
+	"name": "ccsettings",
 	"version": "0.1.0",
 	"description": "",
 	"keywords": [
@@ -12,13 +12,13 @@
 		"configuration",
 		"development"
 	],
-	"homepage": "https://github.com/dyoshikawa/ghevents#readme",
+	"homepage": "https://github.com/dyoshikawa/ccsettings#readme",
 	"bugs": {
-		"url": "https://github.com/dyoshikawa/ghevents/issues"
+		"url": "https://github.com/dyoshikawa/ccsettings/issues"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/dyoshikawa/ghevents.git"
+		"url": "https://github.com/dyoshikawa/ccsettings.git"
 	},
 	"license": "MIT",
 	"author": "dyoshikawa",
@@ -26,7 +26,7 @@
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"bin": {
-		"ghevents": "dist/index.js"
+		"ccsettings": "dist/index.js"
 	},
 	"files": [
 		"dist"

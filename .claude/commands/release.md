@@ -14,4 +14,4 @@ new_version_with_v_prefix = get_version_with_v_prefix($ARGUMENTS) # example: v1.
   - Sections, `What's Changed`, `Contributors` and `Full Changelog` are needed.
   - `./tmp/release-notes.md` will be used as the release notes.
 9. As a precaution, verify that the release content does not contain any information that should remain private.
-10. Use the `gh release create {new_version_with_v_prefix} --title {new_version_with_v_prefix} --notes-file ./tmp/release-notes.md ...` command to create a Release on the `github.com/dyoshikawa/ghevents` repository with both title and tag set to new_version_with_v_prefix, using the content from step 4 as the description.
+10. Use the `gh release create {new_version_with_v_prefix} --title {new_version_with_v_prefix} --notes-file ./tmp/release-notes.md ...` command to create a Release on the `github.com/dyoshikawa/ccsettings` repository with both title and tag set to new_version_with_v_prefix, using the content from step 4 as the description.
