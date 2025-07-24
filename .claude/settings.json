@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "deny": [
+      "Bash(npm publish:*)",
+      "Bash(pnpm publish:*)",
+      "Bash(git remote add:*)",
+      "Bash(git remote set-url:*)"
+    ],
+    "defaultMode": "acceptEdits",
+    "allow": [
+      "Bash(node:*)",
+      "Bash(pnpm:*)",
+      "Bash(rg:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "WebFetch(domain:code.visualstudio.com)",
+      "WebFetch(domain:docs.cursor.com)",
+      "WebFetch(domain:docs.cline.bot)",
+      "WebFetch(domain:docs.roo.com)",
+      "WebFetch(domain:docs.claude.com)",
+      "WebFetch(domain:github.com)",
+      "Bash(gh release create:*)"
+    ]
+  }
+}

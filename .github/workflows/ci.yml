@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality:
+    name: Code Quality & Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10.12.2
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run check
+        run: pnpm check
+
+      - name: Run secretlint
+        run: pnpm secretlint
+
+      - name: Run cspell
+        run: pnpm cspell
+
+      - name: Run tests
+        run: pnpm test
+
+      - name: Build project
+        run: pnpm build
+
+      - name: Check build artifacts
+        run: |
+          test -f dist/index.js
+          test -f dist/index.cjs
+          test -f dist/index.d.ts
+          test -f dist/index.d.cts
