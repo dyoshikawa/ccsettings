@@ -1,16 +1,17 @@
 {
 	"name": "ccsettings",
 	"version": "0.1.0",
-	"description": "",
+	"description": "Claude Code設定テンプレートをプロジェクト単位で適用するCLIツール",
 	"keywords": [
+		"claude-code",
+		"claude",
 		"ai",
-		"rules",
+		"settings",
+		"template",
 		"cli",
-		"copilot",
-		"cursor",
-		"cline",
 		"configuration",
-		"development"
+		"development",
+		"permissions"
 	],
 	"homepage": "https://github.com/dyoshikawa/ccsettings#readme",
 	"bugs": {
@@ -26,7 +27,7 @@
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"bin": {
-		"ccsettings": "dist/index.js"
+		"ccsettings": "dist/cli/index.js"
 	},
 	"files": [
 		"dist"
@@ -38,6 +39,7 @@
 		"check": "pnpm run bcheck && pnpm run oxlint && pnpm run eslint && pnpm run typecheck",
 		"cspell": "cspell \"**/*\"",
 		"dev": "tsx src/cli/index.ts",
+		"start": "node dist/cli/index.js",
 		"eslint": "eslint . --max-warnings 0 --cache",
 		"eslint:fix": "eslint . --fix --max-warnings 0 --cache",
 		"fix": "pnpm run bcheck:fix && pnpm run oxlint:fix && pnpm run eslint:fix",
@@ -56,19 +58,8 @@
 		"pre-commit": "pnpm exec lint-staged"
 	},
 	"dependencies": {
-		"@octokit/graphql": "9.0.1",
-		"@octokit/rest": "22.0.0",
-		"@types/react": "19.1.8",
-		"chokidar": "4.0.3",
-		"clipboardy": "4.0.0",
 		"commander": "14.0.0",
-		"gray-matter": "4.0.3",
-		"ink": "6.0.1",
-		"ink-select-input": "6.2.0",
-		"js-yaml": "4.1.0",
-		"marked": "15.0.12",
-		"micromatch": "4.0.8",
-		"react": "19.1.0",
+		"lodash-es": "4.17.21",
 		"zod": "4.0.5"
 	},
 	"devDependencies": {
@@ -76,8 +67,7 @@
 		"@eslint/js": "9.30.1",
 		"@secretlint/secretlint-rule-preset-recommend": "10.1.0",
 		"@tsconfig/node24": "24.0.1",
-		"@types/js-yaml": "4.0.9",
-		"@types/micromatch": "4.0.9",
+		"@types/lodash-es": "4.17.12",
 		"@types/node": "24.0.3",
 		"@typescript/native-preview": "7.0.0-dev.20250623.1",
 		"@vitest/coverage-v8": "3.2.4",
@@ -87,7 +77,6 @@
 		"eslint-plugin-oxlint": "1.5.0",
 		"eslint-plugin-zod-import": "0.3.0",
 		"lint-staged": "16.1.2",
-		"o3-search-mcp": "0.0.3",
 		"oxlint": "1.4.0",
 		"secretlint": "10.1.0",
 		"simple-git-hooks": "2.13.0",
