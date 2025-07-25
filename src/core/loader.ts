@@ -92,7 +92,11 @@ export async function loadTemplates(
   const errors: string[] = [];
 
   // Convert single values to arrays
-  const templateArray = templateNames ? (Array.isArray(templateNames) ? templateNames : [templateNames]) : [];
+  const templateArray = templateNames
+    ? Array.isArray(templateNames)
+      ? templateNames
+      : [templateNames]
+    : [];
   const fileArray = filePaths ? (Array.isArray(filePaths) ? filePaths : [filePaths]) : [];
   const urlArray = urls ? (Array.isArray(urls) ? urls : [urls]) : [];
 
@@ -128,7 +132,12 @@ export async function loadTemplates(
   }
 
   // If no templates were specified, use default
-  if (templates.length === 0 && templateArray.length === 0 && fileArray.length === 0 && urlArray.length === 0) {
+  if (
+    templates.length === 0 &&
+    templateArray.length === 0 &&
+    fileArray.length === 0 &&
+    urlArray.length === 0
+  ) {
     try {
       const defaultTemplate = await loadTemplate("default");
       templates.push(defaultTemplate);
@@ -141,14 +150,15 @@ export async function loadTemplates(
   // If there are errors but some templates loaded successfully, warn but continue
   if (errors.length > 0 && templates.length > 0) {
     console.warn("⚠️  Some templates failed to load:");
-    errors.forEach(error => console.warn(`  - ${error}`));
+    errors.forEach((error) => console.warn(`  - ${error}`));
   }
 
   // If all templates failed to load, throw an error
   if (templates.length === 0) {
-    const errorMessage = errors.length > 0 
-      ? `Failed to load any templates:\n${errors.map(e => `  - ${e}`).join('\n')}`
-      : "No templates specified and default template is not available";
+    const errorMessage =
+      errors.length > 0
+        ? `Failed to load any templates:\n${errors.map((e) => `  - ${e}`).join("\n")}`
+        : "No templates specified and default template is not available";
     throw new Error(errorMessage);
   }
 

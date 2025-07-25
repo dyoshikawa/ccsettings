@@ -9,9 +9,11 @@ export async function applyCommand(options: ApplyOptions): Promise<void> {
     // Load templates
     console.log("📥 テンプレートを読み込んでいます...");
     const templates = await loadTemplates(options.template, options.file, options.url);
-    
+
     if (templates.length === 1) {
-      console.log(`✅ テンプレート "${templates[0]!.name}" を読み込みました: ${templates[0]!.description}`);
+      console.log(
+        `✅ テンプレート "${templates[0]!.name}" を読み込みました: ${templates[0]!.description}`,
+      );
     } else {
       console.log(`✅ ${templates.length}個のテンプレートを読み込みました:`);
       templates.forEach((template, index) => {
@@ -24,9 +26,9 @@ export async function applyCommand(options: ApplyOptions): Promise<void> {
 
     // Create merge preview
     const { merged, changes } = createMultipleMergePreview(
-      existing, 
-      templates.map(t => t.settings),
-      templates.map(t => t.name)
+      existing,
+      templates.map((t) => t.settings),
+      templates.map((t) => t.name),
     );
 
     // Display preview
@@ -35,7 +37,7 @@ export async function applyCommand(options: ApplyOptions): Promise<void> {
       console.log("\n🆕 追加される設定:");
       changes.added.forEach((change) => {
         const source = changes.templateSources?.get(change);
-        const sourceText = source ? ` [from: ${source}]` : '';
+        const sourceText = source ? ` [from: ${source}]` : "";
         console.log(`  + ${change}${sourceText}`);
       });
     }
@@ -44,7 +46,7 @@ export async function applyCommand(options: ApplyOptions): Promise<void> {
       console.log("\n✏️  変更される設定:");
       changes.modified.forEach((change) => {
         const source = changes.templateSources?.get(change);
-        const sourceText = source ? ` [from: ${source}]` : '';
+        const sourceText = source ? ` [from: ${source}]` : "";
         console.log(`  ~ ${change}${sourceText}`);
       });
     }

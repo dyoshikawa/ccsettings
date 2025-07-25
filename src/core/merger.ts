@@ -44,7 +44,7 @@ export function mergeMultipleTemplates(
   for (const template of templates) {
     result = mergeSettings(result, template);
   }
-  
+
   return result!;
 }
 
@@ -169,7 +169,7 @@ export function createMultipleMergePreview(
   if (templates.length === 0) {
     return {
       merged: existing || {},
-      changes: { added: [], modified: [], unchanged: [], templateSources: new Map() }
+      changes: { added: [], modified: [], unchanged: [], templateSources: new Map() },
     };
   }
 
@@ -179,8 +179,8 @@ export function createMultipleMergePreview(
       ...singlePreview,
       changes: {
         ...singlePreview.changes,
-        templateSources: new Map()
-      }
+        templateSources: new Map(),
+      },
     };
   }
 
@@ -197,13 +197,13 @@ export function createMultipleMergePreview(
   };
 
   let currentMerged = existing;
-  
+
   for (let i = 0; i < templates.length; i++) {
     const template = templates[i]!;
     const templateName = templateNames?.[i] || `Template ${i + 1}`;
-    
+
     const preview = createMergePreview(currentMerged, template);
-    
+
     // Track additions from this template
     for (const addition of preview.changes.added) {
       if (!changes.added.includes(addition)) {
@@ -211,15 +211,15 @@ export function createMultipleMergePreview(
         templateSources.set(addition, templateName);
       }
     }
-    
-    // Track modifications 
+
+    // Track modifications
     for (const modification of preview.changes.modified) {
       if (!changes.modified.includes(modification)) {
         changes.modified.push(modification);
         templateSources.set(modification, templateName);
       }
     }
-    
+
     currentMerged = preview.merged;
   }
 
@@ -231,7 +231,7 @@ export function createMultipleMergePreview(
     merged: currentMerged!,
     changes: {
       ...changes,
-      templateSources
-    }
+      templateSources,
+    },
   };
 }

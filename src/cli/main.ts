@@ -13,7 +13,10 @@ export async function main(): Promise<void> {
     .command("apply")
     .description("Apply settings templates to the current project")
     .option("-t, --template <name>", "Apply built-in templates (can be specified multiple times)")
-    .option("-f, --file <path>", "Apply settings from local files (can be specified multiple times)")
+    .option(
+      "-f, --file <path>",
+      "Apply settings from local files (can be specified multiple times)",
+    )
     .option("-u, --url <url>", "Apply settings from URLs (can be specified multiple times)")
     .option("--dry-run", "Preview changes without applying them")
     .option("--backup", "Create a backup before applying changes")
@@ -24,25 +27,25 @@ export async function main(): Promise<void> {
   let multipleFiles: string[] | undefined;
   let multipleUrls: string[] | undefined;
 
-  applyCmd.hook('preAction', () => {
+  applyCmd.hook("preAction", () => {
     const args = process.argv;
     const templates: string[] = [];
     const files: string[] = [];
     const urls: string[] = [];
 
     for (let i = 0; i < args.length; i++) {
-      if (args[i] === '-t' || args[i] === '--template') {
-        if (i + 1 < args.length && args[i + 1] && !args[i + 1]!.startsWith('-')) {
+      if (args[i] === "-t" || args[i] === "--template") {
+        if (i + 1 < args.length && args[i + 1] && !args[i + 1]!.startsWith("-")) {
           templates.push(args[i + 1]!);
           i++; // Skip the value
         }
-      } else if (args[i] === '-f' || args[i] === '--file') {
-        if (i + 1 < args.length && args[i + 1] && !args[i + 1]!.startsWith('-')) {
+      } else if (args[i] === "-f" || args[i] === "--file") {
+        if (i + 1 < args.length && args[i + 1] && !args[i + 1]!.startsWith("-")) {
           files.push(args[i + 1]!);
           i++; // Skip the value
         }
-      } else if (args[i] === '-u' || args[i] === '--url') {
-        if (i + 1 < args.length && args[i + 1] && !args[i + 1]!.startsWith('-')) {
+      } else if (args[i] === "-u" || args[i] === "--url") {
+        if (i + 1 < args.length && args[i + 1] && !args[i + 1]!.startsWith("-")) {
           urls.push(args[i + 1]!);
           i++; // Skip the value
         }
