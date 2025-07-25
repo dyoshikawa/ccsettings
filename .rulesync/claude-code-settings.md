@@ -5,146 +5,146 @@ description: "Claude Code Settings Specifications"
 globs: []
 ---
 
-# Claude Code `settings.json` 仕様まとめ
+# Claude Code `settings.json` Specification Summary
 
-## 1. 設定ファイルの場所と優先順位
-- ユーザー共通: `~/.claude/settings.json`
-- プロジェクト共有: `<project>/.claude/settings.json`（VCSにコミット可）
-- プロジェクト個人用: `<project>/.claude/settings.local.json`（gitignore対象）
-- エンタープライズ管理ポリシー（最優先・ユーザー側で上書き不可）
+## 1. Configuration File Locations and Priority
+- User global: `~/.claude/settings.json`
+- Project shared: `<project>/.claude/settings.json` (can be committed to VCS)
+- Project personal: `<project>/.claude/settings.local.json` (should be in gitignore)
+- Enterprise managed policy (highest priority, cannot be overridden by user)
   - macOS: `/Library/Application Support/ClaudeCode/managed-settings.json`
   - Linux/WSL: `/etc/claude-code/managed-settings.json`
   - Windows: `C:\ProgramData\ClaudeCode\managed-settings.json`
 
-**適用順序（高→低）**
-1. エンタープライズポリシー  
-2. コマンドライン引数  
-3. ローカル設定（`.claude/settings.local.json`）  
-4. 共有設定（`.claude/settings.json`）  
-5. ユーザー設定（`~/.claude/settings.json`）
+**Application order (high→low)**
+1. Enterprise policy  
+2. Command line arguments  
+3. Local settings (`.claude/settings.local.json`)  
+4. Shared settings (`.claude/settings.json`)  
+5. User settings (`~/.claude/settings.json`)
 
 ---
 
-## 2. ルート直下で利用できる主要キー一覧
+## 2. Main Keys Available at Root Level
 
-| キー | 型 | 説明 | 例 |
+| Key | Type | Description | Example |
 | ---- | -- | ---- | -- |
-| `apiKeyHelper` | `string` | `/bin/sh`で実行されるスクリプト。返り値を `X-Api-Key` と `Authorization: Bearer` に利用 | `"/bin/generate_temp_api_key.sh"` |
-| `cleanupPeriodDays` | `number` | ローカルのチャットログ保持日数（デフォルト: 30） | `20` |
-| `env` | `object` | セッション全体で有効な環境変数のマップ | `{"FOO": "bar"}` |
-| `includeCoAuthoredBy` | `boolean` | `co-authored-by Claude` を Git コミット等に付与するか（デフォルト: `true`） | `false` |
-| `permissions` | `object` | 権限設定（下記詳細） | （後述） |
-| `hooks` | `object` | ツール実行前後のカスタムフック設定 | `{"PreToolUse": {"Bash": "echo 'Running...'"}}` |
-| `model` | `string` | 既定で使用するモデル名 | `"claude-3-5-sonnet-20241022"` |
-| `forceLoginMethod` | `string` | `claudeai` または `console` を強制 | `"console"` |
-| `enableAllProjectMcpServers` | `boolean` | `.mcp.json` 内の MCP サーバーを自動承認 | `true` |
-| `enabledMcpjsonServers` | `string[]` | `.mcp.json` 内から承認する MCP サーバー名指定 | `["memory", "github"]` |
-| `disabledMcpjsonServers` | `string[]` | `.mcp.json` 内から拒否する MCP サーバー名指定 | `["filesystem"]` |
-| `awsAuthRefresh` | `string` | `.aws` ディレクトリを更新するスクリプト | `"aws sso login --profile myprofile"` |
-| `awsCredentialExport` | `string` | AWS資格情報を JSON で出力するスクリプト | `"/bin/generate_aws_grant.sh"` |
+| `apiKeyHelper` | `string` | Script executed via `/bin/sh`. Return value used for `X-Api-Key` and `Authorization: Bearer` | `"/bin/generate_temp_api_key.sh"` |
+| `cleanupPeriodDays` | `number` | Local chat log retention days (default: 30) | `20` |
+| `env` | `object` | Map of environment variables valid for entire session | `{"FOO": "bar"}` |
+| `includeCoAuthoredBy` | `boolean` | Whether to add `co-authored-by Claude` to Git commits etc. (default: `true`) | `false` |
+| `permissions` | `object` | Permission settings (detailed below) | (see below) |
+| `hooks` | `object` | Custom hook settings for before/after tool execution | `{"PreToolUse": {"Bash": "echo 'Running...'"}}` |
+| `model` | `string` | Default model name to use | `"claude-3-5-sonnet-20241022"` |
+| `forceLoginMethod` | `string` | Force `claudeai` or `console` | `"console"` |
+| `enableAllProjectMcpServers` | `boolean` | Auto-approve MCP servers in `.mcp.json` | `true` |
+| `enabledMcpjsonServers` | `string[]` | Specify approved MCP server names from `.mcp.json` | `["memory", "github"]` |
+| `disabledMcpjsonServers` | `string[]` | Specify rejected MCP server names from `.mcp.json` | `["filesystem"]` |
+| `awsAuthRefresh` | `string` | Script to update `.aws` directory | `"aws sso login --profile myprofile"` |
+| `awsCredentialExport` | `string` | Script to output AWS credentials as JSON | `"/bin/generate_aws_grant.sh"` |
 
 ---
 
-## 3. `permissions` セクション仕様
+## 3. `permissions` Section Specification
 
 ```jsonc
 {
   "permissions": {
-    "allow": [ /* 許可ルール配列 */ ],
-    "deny": [  /* 拒否ルール配列（allow より優先） */ ],
-    "additionalDirectories": [ /* 追加でアクセスを許可するディレクトリ */ ],
+    "allow": [ /* allow rule array */ ],
+    "deny": [  /* deny rule array (takes priority over allow) */ ],
+    "additionalDirectories": [ /* additional directories to allow access */ ],
     "defaultMode": "default|acceptEdits|plan|bypassPermissions",
-    "disableBypassPermissionsMode": "disable" // 任意、bypass禁止
+    "disableBypassPermissionsMode": "disable" // optional, disable bypass
   }
 }
 ````
 
-### 3.1 ルール書式
+### 3.1 Rule Format
 
-* 基本形: `"Tool"` または `"Tool(条件)"`
-* 例:
-  * `Bash(npm run test:*)`：`npm run test:`で始まるコマンドを許可/拒否
-  * `Read(~/.zshrc)`：特定ファイルの Read を制御
-  * `Edit(docs/ **)` ：ディレクトリ以下の編集を制御（`gitignore` 準拠パターン）
-  * `WebFetch(domain:example.com)`：対象ドメインを限定
-  * `mcp__serverName__toolName`：特定 MCP ツールを指定
+* Basic format: `"Tool"` or `"Tool(condition)"`
+* Examples:
+  * `Bash(npm run test:*)`：Allow/deny commands starting with `npm run test:`
+  * `Read(~/.zshrc)`：Control Read access to specific files
+  * `Edit(docs/ **)` ：Control editing within directories (`gitignore` compliant patterns)
+  * `WebFetch(domain:example.com)`：Limit to specific domains
+  * `mcp__serverName__toolName`：Specify specific MCP tools
 
-### 3.2 `defaultMode` 値
+### 3.2 `defaultMode` Values
 
-* `default`：初回ツール使用時に許可を求める標準モード
-* `acceptEdits`：編集系ツールを自動許可
-* `plan`：解析のみ。編集や実行不可
-* `bypassPermissions`：全許可（安全環境でのみ推奨）
+* `default`：Standard mode requesting permission on first tool use
+* `acceptEdits`：Auto-approve editing tools
+* `plan`：Analysis only. No editing or execution allowed
+* `bypassPermissions`：Allow all (recommended only in safe environments)
 
 ### 3.3 `additionalDirectories`
 
-* 既定の作業ディレクトリ以外を永続的に追加可
-* `--add-dir` / `/add-dir` でも一時追加可能
+* Can permanently add directories other than default working directory
+* Also temporarily addable via `--add-dir` / `/add-dir`
 
-> **補足**: 旧 `ignorePatterns` は廃止方向。代替として `Read(...)` や `Edit(...)` の **deny ルール** を用いる。
+> **Note**: Legacy `ignorePatterns` is being deprecated. Use **deny rules** for `Read(...)` or `Edit(...)` as alternatives.
 
 ---
 
-## 4. グローバル設定（`claude config set -g` などで管理）
+## 4. Global Settings (managed via `claude config set -g` etc.)
 
-| キー                      | 説明                          | 例                                                                       |
+| Key                      | Description                          | Example                                                                       |
 | ----------------------- | --------------------------- | ----------------------------------------------------------------------- |
-| `autoUpdates`           | 自動アップデートを有効化（デフォルト: `true`） | `false`                                                                 |
-| `preferredNotifChannel` | 通知方法                        | `iterm2`, `iterm2_with_bell`, `terminal_bell`, `notifications_disabled` |
-| `theme`                 | テーマ                         | `dark`, `light`, `light-daltonized`, `dark-daltonized`                  |
-| `verbose`               | Bash やコマンド出力をフル表示するか        | `true`                                                                  |
+| `autoUpdates`           | Enable automatic updates (default: `true`) | `false`                                                                 |
+| `preferredNotifChannel` | Notification method                        | `iterm2`, `iterm2_with_bell`, `terminal_bell`, `notifications_disabled` |
+| `theme`                 | Theme                         | `dark`, `light`, `light-daltonized`, `dark-daltonized`                  |
+| `verbose`               | Whether to show full Bash and command output        | `true`                                                                  |
 
 ---
 
-## 5. 環境変数（`env` でも設定可）
+## 5. Environment Variables (can also be set via `env`)
 
-代表例（抜粋）:
+Representative examples (excerpt):
 
-* 認証関連
+* Authentication related
 
   * `ANTHROPIC_API_KEY`, `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_CUSTOM_HEADERS`
-* モデル指定
+* Model specification
 
   * `ANTHROPIC_MODEL`, `ANTHROPIC_SMALL_FAST_MODEL`
-* Bash 実行制限
+* Bash execution limits
 
   * `BASH_DEFAULT_TIMEOUT_MS`, `BASH_MAX_TIMEOUT_MS`, `BASH_MAX_OUTPUT_LENGTH`
-* Claude Code 動作制御
+* Claude Code behavior control
 
   * `CLAUDE_CODE_MAX_OUTPUT_TOKENS`, `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC`, `CLAUDE_CODE_DISABLE_TERMINAL_TITLE`
   * `DISABLE_AUTOUPDATER`, `DISABLE_BUG_COMMAND`, `DISABLE_ERROR_REPORTING`, `DISABLE_TELEMETRY`, `DISABLE_COST_WARNINGS`
-* MCP 関連
+* MCP related
 
   * `MCP_TIMEOUT`, `MCP_TOOL_TIMEOUT`, `MAX_MCP_OUTPUT_TOKENS`
-* プロキシ
+* Proxy
 
   * `HTTP_PROXY`, `HTTPS_PROXY`
-* Vertex / Bedrock 用リージョン変数
+* Vertex / Bedrock region variables
 
-  * `VERTEX_REGION_CLAUDE_3_5_SONNET` など
-  * `AWS_BEARER_TOKEN_BEDROCK` など
-
----
-
-## 6. 代表的な CLI 操作
-
-* 設定一覧: `claude config list`
-* 個別取得: `claude config get <key>`
-* 設定変更: `claude config set <key> <value>`
-* リストに追加: `claude config add <key> <value>`
-* リストから削除: `claude config remove <key> <value>`
-* グローバル設定対象: `--global` / `-g`
+  * `VERTEX_REGION_CLAUDE_3_5_SONNET` etc.
+  * `AWS_BEARER_TOKEN_BEDROCK` etc.
 
 ---
 
-## 7. ツール一覧（許可制御対象）
+## 6. Common CLI Operations
 
-* 標準ツール例: Bash / Edit / MultiEdit / NotebookEdit / Read / Write / WebFetch / WebSearch / Grep / Glob / LS / Task / TodoWrite など
-  ※ Permission が必要なツールと不要なツールが混在
+* List settings: `claude config list`
+* Get individual: `claude config get <key>`
+* Change setting: `claude config set <key> <value>`
+* Add to list: `claude config add <key> <value>`
+* Remove from list: `claude config remove <key> <value>`
+* Target global settings: `--global` / `-g`
 
 ---
 
-## 8. サンプル `settings.json`
+## 7. Tool List (Permission Control Targets)
+
+* Standard tool examples: Bash / Edit / MultiEdit / NotebookEdit / Read / Write / WebFetch / WebSearch / Grep / Glob / LS / Task / TodoWrite etc.
+  ※ Mix of tools that require permissions and those that don't
+
+---
+
+## 8. Sample `settings.json`
 
 ```json
 {
@@ -179,8 +179,8 @@ globs: []
 
 ---
 
-## 9. 補足
+## 9. Notes
 
-* `ignorePatterns` は現行仕様では非推奨。`permissions.deny` の `Read(...)` / `Edit(...)` で置き換え。
-* `apiKeyHelper` 利用時、`CLAUDE_CODE_API_KEY_HELPER_TTL_MS` でリフレッシュ間隔変更可。
-* セッション中の許可は `/permissions` コマンドから GUI 的に編集可。
+* `ignorePatterns` is deprecated in current specification. Replace with `Read(...)` / `Edit(...)` in `permissions.deny`.
+* When using `apiKeyHelper`, refresh interval can be changed with `CLAUDE_CODE_API_KEY_HELPER_TTL_MS`.
+* Session permissions can be edited GUI-style from `/permissions` command.

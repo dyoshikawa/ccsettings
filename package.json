@@ -1,7 +1,7 @@
 {
 	"name": "ccsettings",
 	"version": "0.3.0",
-	"description": "Claude Code設定テンプレートをプロジェクト単位で適用するCLIツール",
+	"description": "CLI tool for applying Claude Code configuration templates on a per-project basis",
 	"keywords": [
 		"claude-code",
 		"claude",
@@ -24,10 +24,11 @@
 	"license": "MIT",
 	"author": "dyoshikawa",
 	"type": "module",
-	"main": "dist/index.js",
+	"main": "dist/index.cjs",
+	"module": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"bin": {
-		"ccsettings": "dist/cli/index.js"
+		"ccsettings": "dist/index.js"
 	},
 	"files": [
 		"dist"

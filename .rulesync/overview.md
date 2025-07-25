@@ -7,43 +7,43 @@ globs: ["**/*"]
 
 # ccsettings - Claude Code Settings Manager
 
-## プロジェクト概要
+## Project Overview
 
-**ccsettings**は、Claude Code設定テンプレートをプロジェクト単位で適用するCLIツールです。開発者がプロジェクトの`.claude/settings.json`に対して、標準的な設定テンプレートを適用し、既存設定との賢いマージを実現します。
+**ccsettings** is a CLI tool for applying Claude Code configuration templates on a per-project basis. It allows developers to apply standardized configuration templates to their project's `.claude/settings.json` file and achieves intelligent merging with existing settings.
 
-## 主要機能
+## Key Features
 
-1. **テンプレート適用**: プリセット、ローカルファイル、URLからテンプレートを適用
-2. **スマートマージ**: 既存設定を優先しつつ、テンプレート設定を統合
-3. **プリセット管理**: ビルトイン設定テンプレート（default/strict/development/testing）
-4. **設定表示**: 現在の設定状態の確認
-5. **バックアップ**: 変更前の設定の自動保存
+1. **Template Application**: Apply templates from presets, local files, or URLs
+2. **Smart Merge**: Integrate template settings while preserving existing settings
+3. **Preset Management**: Built-in configuration templates (default/strict/development/testing)
+4. **Settings Display**: Check current settings state
+5. **Backup**: Automatic saving of settings before changes
 
-## アーキテクチャ
+## Architecture
 
-### 技術スタック
-- **言語**: TypeScript
-- **CLIフレームワーク**: Commander.js  
-- **バリデーション**: Zod（設定スキーマ検証）
-- **HTTPクライアント**: Node.js fetch API
-- **ユーティリティ**: lodash-es（tree-shaking対応）
+### Technology Stack
+- **Language**: TypeScript
+- **CLI Framework**: Commander.js  
+- **Validation**: Zod (configuration schema validation)
+- **HTTP Client**: Node.js fetch API
+- **Utilities**: lodash-es (tree-shaking compatible)
 
-### プロジェクト構成
+### Project Structure
 ```
-├── src/              # ソースコード（現在未実装）
-├── CLAUDE.md         # プロジェクト指針
-├── SPEC.md           # 詳細仕様書
-├── package.json      # パッケージ設定
-├── tsconfig.json     # TypeScript設定
-├── biome.json        # コード品質設定
-└── vitest.config.ts  # テスト設定
+├── src/              # Source code (currently unimplemented)
+├── CLAUDE.md         # Project guidelines
+├── SPEC.md           # Detailed specification
+├── package.json      # Package configuration
+├── tsconfig.json     # TypeScript configuration
+├── biome.json        # Code quality configuration
+└── vitest.config.ts  # Test configuration
 ```
 
-### 設定ファイル形式
+### Configuration File Format
 ```json
 {
   "name": "template-name",
-  "description": "テンプレートの説明", 
+  "description": "Template description", 
   "settings": {
     "permissions": {
       "allow": ["Read(src/**)"],
@@ -54,40 +54,40 @@ globs: ["**/*"]
 }
 ```
 
-## コマンド仕様
+## Command Specification
 
-### 基本コマンド
-- `ccsettings apply` - デフォルトテンプレート適用
-- `ccsettings apply --template <name>` - 指定プリセット適用  
-- `ccsettings apply --file <path>` - ローカルファイル適用
-- `ccsettings apply --url <url>` - URL適用
-- `ccsettings list` - 利用可能テンプレート一覧
-- `ccsettings show` - 現在設定表示
+### Basic Commands
+- `ccsettings apply` - Apply default template
+- `ccsettings apply --template <name>` - Apply specified preset  
+- `ccsettings apply --file <path>` - Apply local file
+- `ccsettings apply --url <url>` - Apply from URL
+- `ccsettings list` - List available templates
+- `ccsettings show` - Show current settings
 
-### 重要オプション
-- `--dry-run` - 変更プレビュー
-- `--backup` - 設定バックアップ  
-- `--force` - 確認なしで実行
+### Important Options
+- `--dry-run` - Preview changes
+- `--backup` - Backup settings  
+- `--force` - Execute without confirmation
 
-## マージ戦略
+## Merge Strategy
 
-1. **既存設定優先**: 既存の`.claude/settings.json`の値を保持
-2. **配列マージ**: 重複除去して結合
-3. **オブジェクト深マージ**: ネストしたオブジェクトも適切に統合
-4. **プリミティブ値保護**: 既存のプリミティブ値は変更しない
+1. **Existing Settings Priority**: Preserve existing `.claude/settings.json` values
+2. **Array Merge**: Combine with duplicates removed
+3. **Deep Object Merge**: Properly integrate nested objects
+4. **Primitive Value Protection**: Do not change existing primitive values
 
-## 開発状況
+## Development Status
 
-**現在の状態**: 初期セットアップ完了、実装準備段階
-- ✅ プロジェクト構造設定
-- ✅ 開発環境構築（TypeScript, Biome, ESLint, Vitest）
-- ✅ 仕様書作成
-- 🚧 実装中（src/ディレクトリは空）
+**Current State**: Initial setup complete, implementation preparation stage
+- ✅ Project structure setup
+- ✅ Development environment setup (TypeScript, Biome, ESLint, Vitest)
+- ✅ Specification documentation
+- 🚧 Implementation in progress (src/ directory is empty)
 
-## 品質保証
+## Quality Assurance
 
 - **Linting**: Biome + ESLint + oxlint
-- **型チェック**: TypeScript strict mode
-- **テスト**: Vitest with coverage
-- **セキュリティ**: secretlint
-- **スペルチェック**: cspell
+- **Type Checking**: TypeScript strict mode
+- **Testing**: Vitest with coverage
+- **Security**: secretlint
+- **Spell Checking**: cspell

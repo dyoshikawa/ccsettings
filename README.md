@@ -1,147 +1,147 @@
 # ccsettings - Claude Code Settings Manager
 
-Claude Code設定テンプレートをプロジェクト単位で適用するCLIツールです。開発者がプロジェクトの`.claude/settings.json`に対して、標準的な設定テンプレートを適用し、既存設定との賢いマージを実現します。
+A CLI tool for applying Claude Code configuration templates on a per-project basis. It allows developers to apply standardized configuration templates to their project's `.claude/settings.json` file and achieves intelligent merging with existing settings.
 
-## 特徴
+## Features
 
-- 🎯 **4つのビルトインテンプレート**: default, strict, development, testing
-- 🔗 **複数の設定ソース**: ビルトイン、ローカルファイル、URL（GitHub対応）
-- 🧠 **スマートマージ**: 既存設定を優先しつつテンプレートを統合
-- 🔍 **プレビュー機能**: dry-runで変更内容を事前確認
-- 💾 **バックアップ機能**: 変更前の設定を自動保存
-- 🎨 **日本語UI**: 分かりやすい日本語メッセージ
+- 🎯 **4 Built-in Templates**: default, strict, development, testing
+- 🔗 **Multiple Configuration Sources**: Built-in, local files, URLs (GitHub support)
+- 🧠 **Smart Merge**: Integrates templates while preserving existing settings
+- 🔍 **Preview Function**: Preview changes with dry-run before applying
+- 💾 **Backup Function**: Automatically saves settings before changes
+- 🌐 **User-friendly Interface**: Clear and intuitive messages
 
-## インストール
+## Installation
 
 ```bash
 npm install -g ccsettings
-# または
+# or
 pnpm add -g ccsettings
-# または
+# or
 yarn global add ccsettings
 ```
 
-## 基本的な使い方
+## Basic Usage
 
-### 1. 利用可能なテンプレートを確認
+### 1. Check Available Templates
 
 ```bash
 ccsettings list
 ```
 
-### 2. テンプレートを適用（ドライラン）
+### 2. Apply Template (Dry Run)
 
 ```bash
 ccsettings apply --template development --dry-run
 ```
 
-### 3. テンプレートを適用
+### 3. Apply Template
 
 ```bash
 ccsettings apply --template development
 ```
 
-### 4. 現在の設定を確認
+### 4. Show Current Settings
 
 ```bash
 ccsettings show
 ```
 
-## ビルトインテンプレート
+## Built-in Templates
 
 ### default
-基本的な権限設定。一般的な開発作業に適用。
+Basic permission settings. Suitable for general development work.
 
 ```bash
 ccsettings apply --template default
 ```
 
 ### strict  
-厳格なセキュリティ設定。制限の多い環境で使用。
+Strict security settings. Use in restrictive environments.
 
 ```bash
 ccsettings apply --template strict
 ```
 
 ### development
-開発環境向けの緩い設定。幅広い操作を許可。
+Relaxed settings for development environments. Allows wide range of operations.
 
 ```bash
 ccsettings apply --template development
 ```
 
 ### testing
-テスト実行に特化した設定。テストファイルの編集を中心に許可。
+Settings specialized for test execution. Primarily allows editing test files.
 
 ```bash
 ccsettings apply --template testing
 ```
 
-## コマンドリファレンス
+## Command Reference
 
-### apply コマンド
+### apply command
 
-テンプレートを現在のプロジェクトに適用します。
+Apply a template to the current project.
 
 ```bash
 ccsettings apply [options]
 ```
 
-#### オプション
+#### Options
 
-- `-t, --template <name>` - ビルトインテンプレートを指定
-- `-f, --file <path>` - ローカルファイルからテンプレートを読み込み
-- `-u, --url <url>` - URLからテンプレートを取得
-- `--dry-run` - 実際の変更を行わずにプレビューのみ表示
-- `--backup` - 変更前の設定をバックアップ
-- `--force` - 確認なしで変更を適用
+- `-t, --template <name>` - Specify built-in template
+- `-f, --file <path>` - Load template from local file
+- `-u, --url <url>` - Fetch template from URL
+- `--dry-run` - Show preview only without making actual changes
+- `--backup` - Backup settings before changes
+- `--force` - Apply changes without confirmation
 
-#### 使用例
+#### Usage Examples
 
 ```bash
-# デフォルトテンプレートを適用
+# Apply default template
 ccsettings apply
 
-# 開発環境テンプレートを適用
+# Apply development environment template
 ccsettings apply --template development
 
-# ローカルファイルからテンプレートを適用
+# Apply template from local file
 ccsettings apply --file ./my-template.json
 
-# GitHub URLからテンプレートを適用
+# Apply template from GitHub URL
 ccsettings apply --url https://github.com/user/repo/blob/main/template.json
 
-# バックアップ付きで強制適用
+# Force apply with backup
 ccsettings apply --template strict --backup --force
 
-# ドライランで変更内容をプレビュー
+# Preview changes with dry run
 ccsettings apply --template development --dry-run
 ```
 
-### list コマンド
+### list command
 
-利用可能なビルトインテンプレートを一覧表示します。
+List available built-in templates.
 
 ```bash
 ccsettings list
 ```
 
-### show コマンド
+### show command
 
-現在のプロジェクトの設定内容を表示します。
+Display current project settings.
 
 ```bash
 ccsettings show
 ```
 
-## テンプレートファイル形式
+## Template File Format
 
-カスタムテンプレートは以下のJSON形式で作成できます：
+Custom templates can be created in the following JSON format:
 
 ```json
 {
   "name": "my-template",
-  "description": "カスタムテンプレートの説明",
+  "description": "Description of custom template",
   "settings": {
     "permissions": {
       "allow": [
@@ -163,18 +163,18 @@ ccsettings show
 }
 ```
 
-## マージ戦略
+## Merge Strategy
 
-ccsettingsは以下の戦略で既存設定とテンプレートをマージします：
+ccsettings merges existing settings with templates using the following strategy:
 
-1. **既存設定優先**: 既存の設定値は保持されます
-2. **配列マージ**: `allow`や`deny`などの配列は重複を除いて結合
-3. **深いマージ**: ネストしたオブジェクトも再帰的にマージ
-4. **新規追加**: テンプレートにあって既存設定にない項目は追加
+1. **Existing Settings Priority**: Existing setting values are preserved
+2. **Array Merge**: Arrays like `allow` and `deny` are combined with duplicates removed
+3. **Deep Merge**: Nested objects are recursively merged
+4. **New Additions**: Items present in template but not in existing settings are added
 
-### マージ例
+### Merge Example
 
-既存設定:
+Existing settings:
 ```json
 {
   "permissions": {
@@ -184,7 +184,7 @@ ccsettingsは以下の戦略で既存設定とテンプレートをマージし�
 }
 ```
 
-テンプレート:
+Template:
 ```json
 {
   "permissions": {
@@ -195,7 +195,7 @@ ccsettingsは以下の戦略で既存設定とテンプレートをマージし�
 }
 ```
 
-マージ結果:
+Merge result:
 ```json
 {
   "permissions": {
@@ -206,34 +206,34 @@ ccsettingsは以下の戦略で既存設定とテンプレートをマージし�
 }
 ```
 
-## GitHub URL対応
+## GitHub URL Support
 
-GitHub上のテンプレートファイルは自動的にrawファイルURLに変換されます：
+Template files on GitHub are automatically converted to raw file URLs:
 
 ```bash
-# 以下のような通常のGitHub URLが...
+# Regular GitHub URLs like this...
 ccsettings apply --url https://github.com/user/repo/blob/main/template.json
 
-# 自動的にraw URLに変換される
+# Are automatically converted to raw URLs
 # https://raw.githubusercontent.com/user/repo/main/template.json
 ```
 
-## エラーハンドリング
+## Error Handling
 
-- 📁 ファイルが見つからない場合は分かりやすいエラーメッセージを表示
-- 🔍 JSON形式が不正な場合は具体的な問題箇所を指摘
-- 🌐 ネットワークエラーは適切にハンドリング
-- ✅ テンプレートスキーマのバリデーション
+- 📁 Clear error messages when files are not found
+- 🔍 Specific problem identification for invalid JSON format
+- 🌐 Proper handling of network errors
+- ✅ Template schema validation
 
-## ライセンス
+## License
 
 MIT
 
-## 貢献
+## Contributing
 
-プルリクエストやIssueは歓迎です。バグ報告や機能要望がございましたら、[GitHub Issues](https://github.com/dyoshikawa/ccsettings/issues)までお願いします。
+Pull requests and issues are welcome. For bug reports or feature requests, please use [GitHub Issues](https://github.com/dyoshikawa/ccsettings/issues).
 
-## 関連リンク
+## Related Links
 
-- [Claude Code公式ドキュメント](https://docs.anthropic.com/en/docs/claude-code)
-- [Claude Code設定リファレンス](https://docs.anthropic.com/en/docs/claude-code/settings)
+- [Claude Code Official Documentation](https://docs.anthropic.com/en/docs/claude-code)
+- [Claude Code Settings Reference](https://docs.anthropic.com/en/docs/claude-code/settings)
