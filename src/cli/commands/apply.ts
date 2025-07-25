@@ -1,32 +1,52 @@
 import { createInterface } from "node:readline/promises";
-import { loadTemplate } from "../../core/loader.js";
-import { createMergePreview } from "../../core/merger.js";
+import { loadTemplates } from "../../core/loader.js";
+import { createMultipleMergePreview } from "../../core/merger.js";
 import { createBackup, readSettings, writeSettings } from "../../core/settings.js";
 import type { ApplyOptions } from "../../types/index.js";
 
 export async function applyCommand(options: ApplyOptions): Promise<void> {
   try {
-    // Load template
+    // Load templates
     console.log("📥 テンプレートを読み込んでいます...");
-    const template = await loadTemplate(options.template, options.file, options.url);
-    console.log(`✅ テンプレート "${template.name}" を読み込みました: ${template.description}`);
+    const templates = await loadTemplates(options.template, options.file, options.url);
+    
+    if (templates.length === 1) {
+      console.log(`✅ テンプレート "${templates[0]!.name}" を読み込みました: ${templates[0]!.description}`);
+    } else {
+      console.log(`✅ ${templates.length}個のテンプレートを読み込みました:`);
+      templates.forEach((template, index) => {
+        console.log(`  ${index + 1}. "${template.name}": ${template.description}`);
+      });
+    }
 
     // Read existing settings
     const existing = await readSettings();
 
     // Create merge preview
-    const { merged, changes } = createMergePreview(existing, template.settings);
+    const { merged, changes } = createMultipleMergePreview(
+      existing, 
+      templates.map(t => t.settings),
+      templates.map(t => t.name)
+    );
 
     // Display preview
     console.log("\n📋 適用予定の変更:");
     if (changes.added.length > 0) {
       console.log("\n🆕 追加される設定:");
-      changes.added.forEach((change) => console.log(`  + ${change}`));
+      changes.added.forEach((change) => {
+        const source = changes.templateSources?.get(change);
+        const sourceText = source ? ` [from: ${source}]` : '';
+        console.log(`  + ${change}${sourceText}`);
+      });
     }
 
     if (changes.modified.length > 0) {
       console.log("\n✏️  変更される設定:");
-      changes.modified.forEach((change) => console.log(`  ~ ${change}`));
+      changes.modified.forEach((change) => {
+        const source = changes.templateSources?.get(change);
+        const sourceText = source ? ` [from: ${source}]` : '';
+        console.log(`  ~ ${change}${sourceText}`);
+      });
     }
 
     if (changes.unchanged.length > 0) {

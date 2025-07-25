@@ -82,3 +82,75 @@ export async function loadTemplate(
 
   return template;
 }
+
+export async function loadTemplates(
+  templateNames?: string | string[],
+  filePaths?: string | string[],
+  urls?: string | string[],
+): Promise<Template[]> {
+  const templates: Template[] = [];
+  const errors: string[] = [];
+
+  // Convert single values to arrays
+  const templateArray = templateNames ? (Array.isArray(templateNames) ? templateNames : [templateNames]) : [];
+  const fileArray = filePaths ? (Array.isArray(filePaths) ? filePaths : [filePaths]) : [];
+  const urlArray = urls ? (Array.isArray(urls) ? urls : [urls]) : [];
+
+  // Load templates in order: builtin templates first, then files, then URLs
+  for (const templateName of templateArray) {
+    try {
+      const template = await loadTemplate(templateName);
+      templates.push(template);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      errors.push(`Built-in template "${templateName}": ${message}`);
+    }
+  }
+
+  for (const filePath of fileArray) {
+    try {
+      const template = await loadTemplateFromFile(filePath);
+      templates.push(template);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      errors.push(`File "${filePath}": ${message}`);
+    }
+  }
+
+  for (const url of urlArray) {
+    try {
+      const template = await loadTemplateFromUrl(url);
+      templates.push(template);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      errors.push(`URL "${url}": ${message}`);
+    }
+  }
+
+  // If no templates were specified, use default
+  if (templates.length === 0 && templateArray.length === 0 && fileArray.length === 0 && urlArray.length === 0) {
+    try {
+      const defaultTemplate = await loadTemplate("default");
+      templates.push(defaultTemplate);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      errors.push(`Default template: ${message}`);
+    }
+  }
+
+  // If there are errors but some templates loaded successfully, warn but continue
+  if (errors.length > 0 && templates.length > 0) {
+    console.warn("⚠️  Some templates failed to load:");
+    errors.forEach(error => console.warn(`  - ${error}`));
+  }
+
+  // If all templates failed to load, throw an error
+  if (templates.length === 0) {
+    const errorMessage = errors.length > 0 
+      ? `Failed to load any templates:\n${errors.map(e => `  - ${e}`).join('\n')}`
+      : "No templates specified and default template is not available";
+    throw new Error(errorMessage);
+  }
+
+  return templates;
+}

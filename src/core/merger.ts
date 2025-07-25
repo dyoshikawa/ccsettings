@@ -32,6 +32,22 @@ export function mergeSettings(
   return mergeWith({}, template, existing, customMerger);
 }
 
+export function mergeMultipleTemplates(
+  existing: ClaudeSettings | null,
+  templates: ClaudeSettings[],
+): ClaudeSettings {
+  if (templates.length === 0) {
+    return existing || {};
+  }
+
+  let result = existing;
+  for (const template of templates) {
+    result = mergeSettings(result, template);
+  }
+  
+  return result!;
+}
+
 export function createMergePreview(
   existing: ClaudeSettings | null,
   template: ClaudeSettings,
@@ -135,4 +151,87 @@ export function createMergePreview(
   }
 
   return { merged, changes };
+}
+
+export function createMultipleMergePreview(
+  existing: ClaudeSettings | null,
+  templates: ClaudeSettings[],
+  templateNames?: string[],
+): {
+  merged: ClaudeSettings;
+  changes: {
+    added: string[];
+    modified: string[];
+    unchanged: string[];
+    templateSources: Map<string, string>; // key -> template name that introduced it
+  };
+} {
+  if (templates.length === 0) {
+    return {
+      merged: existing || {},
+      changes: { added: [], modified: [], unchanged: [], templateSources: new Map() }
+    };
+  }
+
+  if (templates.length === 1) {
+    const singlePreview = createMergePreview(existing, templates[0]!);
+    return {
+      ...singlePreview,
+      changes: {
+        ...singlePreview.changes,
+        templateSources: new Map()
+      }
+    };
+  }
+
+  // For multiple templates, we need to track which template added what
+  const templateSources = new Map<string, string>();
+  const changes: {
+    added: string[];
+    modified: string[];
+    unchanged: string[];
+  } = {
+    added: [],
+    modified: [],
+    unchanged: [],
+  };
+
+  let currentMerged = existing;
+  
+  for (let i = 0; i < templates.length; i++) {
+    const template = templates[i]!;
+    const templateName = templateNames?.[i] || `Template ${i + 1}`;
+    
+    const preview = createMergePreview(currentMerged, template);
+    
+    // Track additions from this template
+    for (const addition of preview.changes.added) {
+      if (!changes.added.includes(addition)) {
+        changes.added.push(addition);
+        templateSources.set(addition, templateName);
+      }
+    }
+    
+    // Track modifications 
+    for (const modification of preview.changes.modified) {
+      if (!changes.modified.includes(modification)) {
+        changes.modified.push(modification);
+        templateSources.set(modification, templateName);
+      }
+    }
+    
+    currentMerged = preview.merged;
+  }
+
+  // Collect final unchanged items
+  const finalPreview = createMergePreview(existing, currentMerged!);
+  changes.unchanged = finalPreview.changes.unchanged;
+
+  return {
+    merged: currentMerged!,
+    changes: {
+      ...changes,
+      templateSources
+    }
+  };
 }

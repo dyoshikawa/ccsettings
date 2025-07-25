@@ -200,6 +200,78 @@ describe('CLI Integration Tests', () => {
     });
   });
 
+  describe('multiple templates', () => {
+    it('should apply multiple builtin templates', async () => {
+      const { stdout } = await execFileAsync('tsx', [
+        join(originalCwd, 'src/cli/index.ts'),
+        'apply',
+        '--template',
+        'default',
+        '--template',
+        'testing',
+        '--dry-run'
+      ]);
+
+      expect(stdout).toContain('2個のテンプレートを読み込みました');
+      expect(stdout).toContain('default');
+      expect(stdout).toContain('testing');
+      expect(stdout).toContain('ドライランモード');
+    });
+
+    it('should apply multiple templates with source tracking', async () => {
+      const { stdout } = await execFileAsync('tsx', [
+        join(originalCwd, 'src/cli/index.ts'),
+        'apply',
+        '--template',
+        'strict',
+        '--template',
+        'development',
+        '--dry-run'
+      ]);
+
+      expect(stdout).toContain('2個のテンプレートを読み込みました');
+      expect(stdout).toContain('[from: strict]');
+      expect(stdout).toContain('[from: development]');
+    });
+
+    it('should handle mixed template sources', async () => {
+      // Create a custom template file
+      const customTemplate = {
+        name: 'custom',
+        description: 'Custom test template',
+        settings: {
+          permissions: {
+            allow: ['Read(custom/**)'],
+            deny: ['Write(custom/**)']
+          },
+          env: {
+            CUSTOM_VAR: 'test'
+          }
+        }
+      };
+
+      await fs.writeFile(
+        join(tempDir, 'custom-template.json'),
+        JSON.stringify(customTemplate, null, 2)
+      );
+
+      const { stdout } = await execFileAsync('tsx', [
+        join(originalCwd, 'src/cli/index.ts'),
+        'apply',
+        '--template',
+        'default',
+        '--file',
+        join(tempDir, 'custom-template.json'),
+        '--dry-run'
+      ]);
+
+      expect(stdout).toContain('2個のテンプレートを読み込みました');
+      expect(stdout).toContain('default');
+      expect(stdout).toContain('custom');
+      expect(stdout).toContain('env.CUSTOM_VAR: test');
+    });
+  });
+
   describe('error handling', () => {
     it('should handle invalid template name', async () => {
       await expect(

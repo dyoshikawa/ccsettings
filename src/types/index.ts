@@ -8,9 +8,9 @@ export type ClaudeSettings = z.infer<typeof ClaudeSettingsSchema> & {
 export type Template = z.infer<typeof TemplateSchema>;
 
 export interface ApplyOptions {
-  template?: string;
-  file?: string;
-  url?: string;
+  template?: string | string[];
+  file?: string | string[];
+  url?: string | string[];
   dryRun?: boolean;
   backup?: boolean;
   force?: boolean;
