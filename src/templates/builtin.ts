@@ -3,80 +3,85 @@ import type { Template } from "../types/index.js";
 export const builtinTemplates: Record<string, Template> = {
   default: {
     name: "default",
-    description: "基本的な権限設定",
+    description: "Casual settings.",
     settings: {
       permissions: {
         allow: [
-          "Read(src/**)",
-          "Read(*.{js,ts,json,md})",
-          "Edit(src/**)",
-          "Bash(npm run lint)",
-          "Bash(npm run test)",
+          "Bash(git:*)",
+          "Bash(gh:*)",
+          "Bash(touch:*)",
+          "Bash(mkdir:*)",
+          "Bash(rg:*)",
+          "Bash(grep:*)",
+          "Bash(cp:*)",
+          "Bash(mv:*)",
+          "Bash(rm:*)",
+          "Read(**)",
+          "Edit(**)",
+          "MultiEdit(**)",
+          "WebFetch(domain:*)",
+          "WebSearch(domain:*)",
+          "Write(**)",
         ],
-        deny: ["Bash(rm -rf *)", "Bash(sudo *)", "Write(/etc/**)"],
-        defaultMode: "default",
+        deny: [
+          "Bash(rm -rf ~/**)",
+          "Bash(rm -rf //**)",
+          "Bash(git remote add:*)",
+          "Bash(git remote set-url:*)",
+        ],
+        defaultMode: "acceptEdits",
+      },
+      env: {
+        BASH_DEFAULT_TIMEOUT_MS: "300000",
+        BASH_MAX_TIMEOUT_MS: "1200000",
       },
     },
   },
 
   strict: {
     name: "strict",
-    description: "厳格なセキュリティ設定",
+    description: "Strict settings.",
     settings: {
       permissions: {
-        allow: ["Read(src/**)", "Read(*.md)"],
-        deny: ["Bash(*)", "WebFetch(*)", "Write(*)", "Edit(*)"],
-        defaultMode: "plan",
+        allow: [
+          "Bash(git:*)",
+          "Bash(gh:*)",
+          "Read(**)",
+          "Edit(**)",
+          "MultiEdit(**)",
+          "Write(**)",
+        ],
+        deny: [
+          "Bash(rm -rf ~/**)",
+          "Bash(rm -rf //**)",
+          "Bash(git remote add:*)",
+          "Bash(git remote set-url:*)",
+        ],
+        defaultMode: "acceptEdits",
+      },
+      env: {
+        BASH_DEFAULT_TIMEOUT_MS: "300000",
+        BASH_MAX_TIMEOUT_MS: "1200000",
       },
     },
   },
 
-  development: {
-    name: "development",
-    description: "開発環境向けの緩い設定",
+  node: {
+    name: "node",
+    description: "Node.js development settings.",
     settings: {
       permissions: {
         allow: [
-          "Read(**)",
-          "Edit(src/**)",
-          "Edit(*.{js,ts,json,md})",
-          "Bash(npm run *)",
-          "Bash(yarn *)",
-          "Bash(git *)",
-          "WebFetch(domain:github.com)",
-          "WebFetch(domain:npmjs.com)",
+          "Bash(npm:*)",
+          "Bash(yarn:*)",
+          "Bash(pnpm:*)",
         ],
-        deny: ["Bash(rm -rf *)", "Bash(sudo *)", "Edit(/etc/**)"],
+        deny: ["Bash(npm publish:*)", "Bash(pnpm publish:*)", "Bash(yarn publish:*)"],
         defaultMode: "acceptEdits",
       },
       env: {
-        NODE_ENV: "development",
-      },
-    },
-  },
-
-  testing: {
-    name: "testing",
-    description: "テスト実行に特化した設定",
-    settings: {
-      permissions: {
-        allow: [
-          "Read(**)",
-          "Edit(test/**)",
-          "Edit(spec/**)",
-          "Edit(*.test.*)",
-          "Edit(*.spec.*)",
-          "Bash(npm run test*)",
-          "Bash(npm run lint)",
-          "Bash(yarn test*)",
-          "Bash(vitest *)",
-          "Bash(jest *)",
-        ],
-        deny: ["Edit(src/**)", "Bash(rm -rf *)", "Bash(sudo *)"],
-        defaultMode: "acceptEdits",
-      },
-      env: {
-        NODE_ENV: "test",
+        BASH_DEFAULT_TIMEOUT_MS: "300000",
+        BASH_MAX_TIMEOUT_MS: "1200000",
       },
     },
   },
