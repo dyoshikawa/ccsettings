@@ -1,6 +1,10 @@
+import { z } from "zod/mini";
+import { TemplateSchema } from "../schemas/index.js";
 import type { Template } from "../types/index.js";
 
-export const builtinTemplates: Record<string, Template> = {
+const BuiltinTemplatesSchema = z.record(z.string(), TemplateSchema);
+
+const rawBuiltinTemplates = {
   default: {
     name: "default",
     description: "Casual settings.",
@@ -74,7 +78,10 @@ export const builtinTemplates: Record<string, Template> = {
       },
     },
   },
-};
+} as const;
+
+export const builtinTemplates: Record<string, Template> =
+  BuiltinTemplatesSchema.parse(rawBuiltinTemplates);
 
 export function getBuiltinTemplate(name: string): Template | undefined {
   return builtinTemplates[name];
