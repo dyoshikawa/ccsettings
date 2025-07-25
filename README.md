@@ -102,8 +102,8 @@ ccsettings apply [options]
 # Apply default template
 ccsettings apply
 
-# Apply development environment template
-ccsettings apply --template development
+# Apply strict template
+ccsettings apply --template strict
 
 # Apply template from local file
 ccsettings apply --file ./my-template.json
@@ -115,7 +115,7 @@ ccsettings apply --url https://github.com/user/repo/blob/main/template.json
 ccsettings apply --template strict --backup --force
 
 # Preview changes with dry run
-ccsettings apply --template development --dry-run
+ccsettings apply --template strict --dry-run
 ```
 
 ### list command
@@ -155,10 +155,6 @@ Custom templates can be created in the following JSON format:
       ],
       "defaultMode": "acceptEdits"
     },
-    "env": {
-      "NODE_ENV": "development",
-      "DEBUG": "true"
-    }
   }
 }
 ```
