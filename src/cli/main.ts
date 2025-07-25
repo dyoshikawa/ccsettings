@@ -7,7 +7,7 @@ export async function main(): Promise<void> {
   program
     .name("ccsettings")
     .description("Claude Code Settings Manager - Apply settings templates to projects")
-    .version("0.2.0");
+    .version("0.3.0");
 
   const applyCmd = program
     .command("apply")
