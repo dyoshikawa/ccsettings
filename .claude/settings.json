@@ -1,6 +1,9 @@
 {
   "permissions": {
     "allow": [
+      "Bash(npm:*)",
+      "Bash(yarn:*)",
+      "Bash(pnpm:*)",
       "Bash(git:*)",
       "Bash(gh:*)",
       "Bash(touch:*)",
@@ -17,7 +20,6 @@
       "WebSearch(domain:*)",
       "Write(**)",
       "Bash(node:*)",
-      "Bash(pnpm:*)",
       "Bash(find:*)",
       "WebFetch(domain:code.visualstudio.com)",
       "WebFetch(domain:docs.cursor.com)",
@@ -28,12 +30,13 @@
       "Bash(gh release create:*)"
     ],
     "deny": [
+      "Bash(npm publish:*)",
+      "Bash(pnpm publish:*)",
+      "Bash(yarn publish:*)",
       "Bash(rm -rf ~/**)",
       "Bash(rm -rf //**)",
       "Bash(git remote add:*)",
-      "Bash(git remote set-url:*)",
-      "Bash(npm publish:*)",
-      "Bash(pnpm publish:*)"
+      "Bash(git remote set-url:*)"
     ],
     "defaultMode": "acceptEdits"
   },
