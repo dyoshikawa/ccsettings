@@ -43,14 +43,7 @@ export const builtinTemplates: Record<string, Template> = {
     description: "Strict settings.",
     settings: {
       permissions: {
-        allow: [
-          "Bash(git:*)",
-          "Bash(gh:*)",
-          "Read(**)",
-          "Edit(**)",
-          "MultiEdit(**)",
-          "Write(**)",
-        ],
+        allow: ["Bash(git:*)", "Bash(gh:*)", "Read(**)", "Edit(**)", "MultiEdit(**)", "Write(**)"],
         deny: [
           "Bash(rm -rf ~/**)",
           "Bash(rm -rf //**)",
@@ -71,11 +64,7 @@ export const builtinTemplates: Record<string, Template> = {
     description: "Node.js development settings.",
     settings: {
       permissions: {
-        allow: [
-          "Bash(npm:*)",
-          "Bash(yarn:*)",
-          "Bash(pnpm:*)",
-        ],
+        allow: ["Bash(npm:*)", "Bash(yarn:*)", "Bash(pnpm:*)"],
         deny: ["Bash(npm publish:*)", "Bash(pnpm publish:*)", "Bash(yarn publish:*)"],
         defaultMode: "acceptEdits",
       },
