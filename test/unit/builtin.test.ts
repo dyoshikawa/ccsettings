@@ -7,34 +7,26 @@ describe('builtin templates', () => {
       const template = getBuiltinTemplate('default');
       expect(template).toBeDefined();
       expect(template?.name).toBe('default');
-      expect(template?.description).toBe('基本的な権限設定');
-      expect(template?.settings.permissions?.defaultMode).toBe('default');
+      expect(template?.description).toBe('Casual settings.');
+      expect(template?.settings.permissions?.defaultMode).toBe('acceptEdits');
     });
 
     it('should return strict template', () => {
       const template = getBuiltinTemplate('strict');
       expect(template).toBeDefined();
       expect(template?.name).toBe('strict');
-      expect(template?.description).toBe('厳格なセキュリティ設定');
-      expect(template?.settings.permissions?.defaultMode).toBe('plan');
+      expect(template?.description).toBe('Strict settings.');
+      expect(template?.settings.permissions?.defaultMode).toBe('acceptEdits');
     });
 
-    it('should return development template', () => {
-      const template = getBuiltinTemplate('development');
+    it('should return node template', () => {
+      const template = getBuiltinTemplate('node');
       expect(template).toBeDefined();
-      expect(template?.name).toBe('development');
-      expect(template?.description).toBe('開発環境向けの緩い設定');
+      expect(template?.name).toBe('node');
+      expect(template?.description).toBe('Node.js development settings.');
       expect(template?.settings.permissions?.defaultMode).toBe('acceptEdits');
-      expect(template?.settings.env?.NODE_ENV).toBe('development');
-    });
-
-    it('should return testing template', () => {
-      const template = getBuiltinTemplate('testing');
-      expect(template).toBeDefined();
-      expect(template?.name).toBe('testing');
-      expect(template?.description).toBe('テスト実行に特化した設定');
-      expect(template?.settings.permissions?.defaultMode).toBe('acceptEdits');
-      expect(template?.settings.env?.NODE_ENV).toBe('test');
+      expect(template?.settings.env?.BASH_DEFAULT_TIMEOUT_MS).toBe('300000');
+      expect(template?.settings.env?.BASH_MAX_TIMEOUT_MS).toBe('1200000');
     });
 
     it('should return undefined for unknown template', () => {
@@ -46,8 +38,8 @@ describe('builtin templates', () => {
   describe('listBuiltinTemplates', () => {
     it('should return all builtin templates', () => {
       const templates = listBuiltinTemplates();
-      expect(templates).toHaveLength(4);
-      expect(templates.map(t => t.name)).toEqual(['default', 'strict', 'development', 'testing']);
+      expect(templates).toHaveLength(3);
+      expect(templates.map(t => t.name)).toEqual(['default', 'strict', 'node']);
     });
 
     it('should return templates with all required fields', () => {
@@ -94,21 +86,42 @@ describe('builtin templates', () => {
       });
     });
 
-    it('should have proper environment variables in development and testing templates', () => {
-      const devTemplate = getBuiltinTemplate('development');
-      expect(devTemplate?.settings.env?.NODE_ENV).toBe('development');
+    it('should have proper environment variables in default templates', () => {
+      const defaultTemplate = getBuiltinTemplate('default');
+      expect(defaultTemplate?.settings.env?.BASH_DEFAULT_TIMEOUT_MS).toBe('300000');
+      expect(defaultTemplate?.settings.env?.BASH_MAX_TIMEOUT_MS).toBe('1200000');
 
-      const testTemplate = getBuiltinTemplate('testing');
-      expect(testTemplate?.settings.env?.NODE_ENV).toBe('test');
+      const nodeTemplate = getBuiltinTemplate('node');
+      expect(nodeTemplate?.settings.env?.BASH_DEFAULT_TIMEOUT_MS).toBe('300000');
+      expect(nodeTemplate?.settings.env?.BASH_MAX_TIMEOUT_MS).toBe('1200000');
     });
 
     it('should have appropriate security restrictions in strict template', () => {
       const strictTemplate = getBuiltinTemplate('strict');
-      expect(strictTemplate?.settings.permissions?.defaultMode).toBe('plan');
-      expect(strictTemplate?.settings.permissions?.deny).toContain('Bash(*)');
-      expect(strictTemplate?.settings.permissions?.deny).toContain('WebFetch(*)');
-      expect(strictTemplate?.settings.permissions?.deny).toContain('Write(*)');
-      expect(strictTemplate?.settings.permissions?.deny).toContain('Edit(*)');
+      expect(strictTemplate?.settings.permissions?.defaultMode).toBe('acceptEdits');
+      expect(strictTemplate?.settings.permissions?.deny).toContain('Bash(rm -rf ~/**)');
+      expect(strictTemplate?.settings.permissions?.deny).toContain('Bash(rm -rf //**)');
+      expect(strictTemplate?.settings.permissions?.deny).toContain('Bash(git remote add:*)');
+      expect(strictTemplate?.settings.permissions?.deny).toContain('Bash(git remote set-url:*)');
+    });
+
+    it('should have appropriate permissions in default template', () => {
+      const defaultTemplate = getBuiltinTemplate('default');
+      expect(defaultTemplate?.settings.permissions?.allow).toContain('Bash(git:*)');
+      expect(defaultTemplate?.settings.permissions?.allow).toContain('Bash(gh:*)');
+      expect(defaultTemplate?.settings.permissions?.allow).toContain('Bash(touch:*)');
+      expect(defaultTemplate?.settings.permissions?.allow).toContain('Bash(mkdir:*)');
+      expect(defaultTemplate?.settings.permissions?.allow).toContain('Bash(rg:*)');
+    });
+
+    it('should have appropriate permissions in node template', () => {
+      const nodeTemplate = getBuiltinTemplate('node');
+      expect(nodeTemplate?.settings.permissions?.allow).toContain('Bash(npm:*)');
+      expect(nodeTemplate?.settings.permissions?.allow).toContain('Bash(yarn:*)');
+      expect(nodeTemplate?.settings.permissions?.allow).toContain('Bash(pnpm:*)');
+      expect(nodeTemplate?.settings.permissions?.deny).toContain('Bash(npm publish:*)');
+      expect(nodeTemplate?.settings.permissions?.deny).toContain('Bash(pnpm publish:*)');
+      expect(nodeTemplate?.settings.permissions?.deny).toContain('Bash(yarn publish:*)');
     });
   });
 });

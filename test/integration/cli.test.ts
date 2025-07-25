@@ -32,10 +32,9 @@ describe('CLI Integration Tests', () => {
       expect(stdout).toContain('利用可能なビルトインテンプレート');
       expect(stdout).toContain('default');
       expect(stdout).toContain('strict');
-      expect(stdout).toContain('development');
-      expect(stdout).toContain('testing');
-      expect(stdout).toContain('基本的な権限設定');
-      expect(stdout).toContain('厳格なセキュリティ設定');
+      expect(stdout).toContain('node');
+      expect(stdout).toContain('Casual settings.');
+      expect(stdout).toContain('Strict settings.');
     });
   });
 
@@ -119,8 +118,8 @@ describe('CLI Integration Tests', () => {
       const settings = JSON.parse(settingsContent);
       
       expect(settings.permissions).toBeDefined();
-      expect(settings.permissions.defaultMode).toBe('default');
-      expect(settings.permissions.allow).toContain('Read(src/**)');
+      expect(settings.permissions.defaultMode).toBe('acceptEdits');
+      expect(settings.permissions.allow).toContain('Read(**)');
     });
 
     it('should merge with existing settings', async () => {
@@ -145,7 +144,7 @@ describe('CLI Integration Tests', () => {
         join(originalCwd, 'src/cli/index.ts'),
         'apply',
         '--template',
-        'development',
+        'node',
         '--force'
       ]);
 
@@ -161,8 +160,8 @@ describe('CLI Integration Tests', () => {
       
       // Should add new values
       expect(settings.permissions.allow).toContain('Read(existing/**)');
-      expect(settings.permissions.allow).toContain('Read(**)');
-      expect(settings.env.NODE_ENV).toBe('development');
+      expect(settings.permissions.allow).toContain('Bash(npm:*)');
+      expect(settings.env.BASH_DEFAULT_TIMEOUT_MS).toBe('300000');
     });
 
     it('should create backup when requested', async () => {
@@ -208,13 +207,13 @@ describe('CLI Integration Tests', () => {
         '--template',
         'default',
         '--template',
-        'testing',
+        'node',
         '--dry-run'
       ]);
 
-      expect(stdout).toContain('2個のテンプレートを読み込みました');
+      expect(stdout).toContain('2個のテンプレートを読み込みました:');
       expect(stdout).toContain('default');
-      expect(stdout).toContain('testing');
+      expect(stdout).toContain('node');
       expect(stdout).toContain('ドライランモード');
     });
 
@@ -225,13 +224,13 @@ describe('CLI Integration Tests', () => {
         '--template',
         'strict',
         '--template',
-        'development',
+        'node',
         '--dry-run'
       ]);
 
-      expect(stdout).toContain('2個のテンプレートを読み込みました');
+      expect(stdout).toContain('2個のテンプレートを読み込みました:');
       expect(stdout).toContain('[from: strict]');
-      expect(stdout).toContain('[from: development]');
+      expect(stdout).toContain('[from: node]');
     });
 
     it('should handle mixed template sources', async () => {
@@ -265,7 +264,7 @@ describe('CLI Integration Tests', () => {
         '--dry-run'
       ]);
 
-      expect(stdout).toContain('2個のテンプレートを読み込みました');
+      expect(stdout).toContain('2個のテンプレートを読み込みました:');
       expect(stdout).toContain('default');
       expect(stdout).toContain('custom');
       expect(stdout).toContain('env.CUSTOM_VAR: test');

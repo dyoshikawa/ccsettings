@@ -31,6 +31,5 @@ export async function listCommand(): Promise<void> {
   console.log("💡 使用例:");
   console.log("  ccsettings apply --template default");
   console.log("  ccsettings apply --template strict");
-  console.log("  ccsettings apply --template development");
-  console.log("  ccsettings apply --template testing");
+  console.log("  ccsettings apply --template node");
 }

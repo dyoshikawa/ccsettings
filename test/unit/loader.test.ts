@@ -189,14 +189,14 @@ describe('loader', () => {
       const result = await loadTemplate('default');
 
       expect(result.name).toBe('default');
-      expect(result.description).toBe('基本的な権限設定');
+      expect(result.description).toBe('Casual settings.');
     });
 
     it('should load default template when no parameters provided', async () => {
       const result = await loadTemplate();
 
       expect(result.name).toBe('default');
-      expect(result.description).toBe('基本的な権限設定');
+      expect(result.description).toBe('Casual settings.');
     });
 
     it('should throw error for unknown builtin template', async () => {
