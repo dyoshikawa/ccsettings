@@ -5,8 +5,14 @@ A CLI tool for applying Claude Code configuration templates on a per-project bas
 ## Getting Started
 
 ```bash
-# Apply casual template
+# Apply casual template to .claude/settings.json
 npx ccsettings apply --template casual
+# Apply casual template to .claude/settings.local.json
+npx ccsettings apply --template casual --local
+# Apply local template
+npx ccsettings apply --file /path/to/my-settings.json
+# Apply template from GitHub URL
+npx ccsettings apply --url https://github.com/owner/repo/blob/main/my-settings.json
 ```
 
 ## Features
