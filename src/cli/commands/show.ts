@@ -11,7 +11,7 @@ export async function showCommand(): Promise<void> {
       console.log("❌ 設定ファイルが見つかりません");
       console.log(`   予想パス: ${settingsPath}`);
       console.log("\n💡 設定を作成するには:");
-      console.log("  ccsettings apply --template default");
+      console.log("  ccsettings apply --template casual");
       return;
     }
 

@@ -2,9 +2,16 @@
 
 A CLI tool for applying Claude Code configuration templates on a per-project basis. It allows developers to apply standardized configuration templates to their project's `.claude/settings.json` file and achieves intelligent merging with existing settings.
 
+## Getting Started
+
+```bash
+# Apply casual template
+npx ccsettings apply --template casual
+```
+
 ## Features
 
-- 🎯 **4 Built-in Templates**: default, strict, development, testing
+- 🎯 **4 Built-in Templates**: casual, strict, node,etc.
 - 🔗 **Multiple Configuration Sources**: Built-in, local files, URLs (GitHub support)
 - 🧠 **Smart Merge**: Integrates templates while preserving existing settings
 - 🔍 **Preview Function**: Preview changes with dry-run before applying
@@ -32,49 +39,19 @@ ccsettings list
 ### 2. Apply Template (Dry Run)
 
 ```bash
-ccsettings apply --template development --dry-run
+ccsettings apply --template casual --dry-run
 ```
 
 ### 3. Apply Template
 
 ```bash
-ccsettings apply --template development
+ccsettings apply --template strict
 ```
 
 ### 4. Show Current Settings
 
 ```bash
 ccsettings show
-```
-
-## Built-in Templates
-
-### default
-Basic permission settings. Suitable for general development work.
-
-```bash
-ccsettings apply --template default
-```
-
-### strict  
-Strict security settings. Use in restrictive environments.
-
-```bash
-ccsettings apply --template strict
-```
-
-### development
-Relaxed settings for development environments. Allows wide range of operations.
-
-```bash
-ccsettings apply --template development
-```
-
-### testing
-Settings specialized for test execution. Primarily allows editing test files.
-
-```bash
-ccsettings apply --template testing
 ```
 
 ## Command Reference

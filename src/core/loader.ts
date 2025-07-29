@@ -131,20 +131,16 @@ export async function loadTemplates(
     }
   }
 
-  // If no templates were specified, use default
+  // If no templates were specified, throw an error
   if (
     templates.length === 0 &&
     templateArray.length === 0 &&
     fileArray.length === 0 &&
     urlArray.length === 0
   ) {
-    try {
-      const defaultTemplate = await loadTemplate("default");
-      templates.push(defaultTemplate);
-    } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      errors.push(`Default template: ${message}`);
-    }
+    throw new Error(
+      "No templates specified. Please specify at least one template using --template, --file, or --url option.",
+    );
   }
 
   // If there are errors but some templates loaded successfully, warn but continue

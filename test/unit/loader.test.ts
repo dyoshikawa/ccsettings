@@ -160,7 +160,7 @@ describe('loader', () => {
       });
 
       const result = await loadTemplate(
-        'default',
+        'casual',
         '/path/to/file.json',
         'https://example.com/template.json'
       );
@@ -179,23 +179,23 @@ describe('loader', () => {
 
       (fs.readFile as any).mockResolvedValue(JSON.stringify(mockTemplate));
 
-      const result = await loadTemplate('default', '/path/to/file.json');
+      const result = await loadTemplate('casual', '/path/to/file.json');
 
       expect(result).toEqual(mockTemplate);
       expect(fs.readFile).toHaveBeenCalled();
     });
 
     it('should load builtin template by name', async () => {
-      const result = await loadTemplate('default');
+      const result = await loadTemplate('casual');
 
-      expect(result.name).toBe('default');
+      expect(result.name).toBe('casual');
       expect(result.description).toBe('Casual settings.');
     });
 
-    it('should load default template when no parameters provided', async () => {
-      const result = await loadTemplate();
+    it('should load casual template when casual is specified', async () => {
+      const result = await loadTemplate('casual');
 
-      expect(result.name).toBe('default');
+      expect(result.name).toBe('casual');
       expect(result.description).toBe('Casual settings.');
     });
 

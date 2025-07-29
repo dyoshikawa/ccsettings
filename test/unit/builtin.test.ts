@@ -3,10 +3,10 @@ import { getBuiltinTemplate, listBuiltinTemplates, builtinTemplates } from '../.
 
 describe('builtin templates', () => {
   describe('getBuiltinTemplate', () => {
-    it('should return default template', () => {
-      const template = getBuiltinTemplate('default');
+    it('should return casual template', () => {
+      const template = getBuiltinTemplate('casual');
       expect(template).toBeDefined();
-      expect(template?.name).toBe('default');
+      expect(template?.name).toBe('casual');
       expect(template?.description).toBe('Casual settings.');
       expect(template?.settings.permissions?.defaultMode).toBe('acceptEdits');
     });
@@ -39,7 +39,7 @@ describe('builtin templates', () => {
     it('should return all builtin templates', () => {
       const templates = listBuiltinTemplates();
       expect(templates).toHaveLength(3);
-      expect(templates.map(t => t.name)).toEqual(['default', 'strict', 'node']);
+      expect(templates.map(t => t.name)).toEqual(['casual', 'strict', 'node']);
     });
 
     it('should return templates with all required fields', () => {
@@ -86,10 +86,10 @@ describe('builtin templates', () => {
       });
     });
 
-    it('should have proper environment variables in default templates', () => {
-      const defaultTemplate = getBuiltinTemplate('default');
-      expect(defaultTemplate?.settings.env?.BASH_DEFAULT_TIMEOUT_MS).toBe('300000');
-      expect(defaultTemplate?.settings.env?.BASH_MAX_TIMEOUT_MS).toBe('1200000');
+    it('should have proper environment variables in casual templates', () => {
+      const casualTemplate = getBuiltinTemplate('casual');
+      expect(casualTemplate?.settings.env?.BASH_DEFAULT_TIMEOUT_MS).toBe('300000');
+      expect(casualTemplate?.settings.env?.BASH_MAX_TIMEOUT_MS).toBe('1200000');
 
       const nodeTemplate = getBuiltinTemplate('node');
       expect(nodeTemplate?.settings.env?.BASH_DEFAULT_TIMEOUT_MS).toBe('300000');
@@ -99,19 +99,19 @@ describe('builtin templates', () => {
     it('should have appropriate security restrictions in strict template', () => {
       const strictTemplate = getBuiltinTemplate('strict');
       expect(strictTemplate?.settings.permissions?.defaultMode).toBe('acceptEdits');
-      expect(strictTemplate?.settings.permissions?.deny).toContain('Bash(rm -rf ~/**)');
+      expect(strictTemplate?.settings.permissions?.deny).toContain('Bash(rm -rf ~/)');
       expect(strictTemplate?.settings.permissions?.deny).toContain('Bash(rm -rf //**)');
       expect(strictTemplate?.settings.permissions?.deny).toContain('Bash(git remote add:*)');
       expect(strictTemplate?.settings.permissions?.deny).toContain('Bash(git remote set-url:*)');
     });
 
-    it('should have appropriate permissions in default template', () => {
-      const defaultTemplate = getBuiltinTemplate('default');
-      expect(defaultTemplate?.settings.permissions?.allow).toContain('Bash(git:*)');
-      expect(defaultTemplate?.settings.permissions?.allow).toContain('Bash(gh:*)');
-      expect(defaultTemplate?.settings.permissions?.allow).toContain('Bash(touch:*)');
-      expect(defaultTemplate?.settings.permissions?.allow).toContain('Bash(mkdir:*)');
-      expect(defaultTemplate?.settings.permissions?.allow).toContain('Bash(rg:*)');
+    it('should have appropriate permissions in casual template', () => {
+      const casualTemplate = getBuiltinTemplate('casual');
+      expect(casualTemplate?.settings.permissions?.allow).toContain('Bash(git:*)');
+      expect(casualTemplate?.settings.permissions?.allow).toContain('Bash(gh:*)');
+      expect(casualTemplate?.settings.permissions?.allow).toContain('Bash(touch:*)');
+      expect(casualTemplate?.settings.permissions?.allow).toContain('Bash(mkdir:*)');
+      expect(casualTemplate?.settings.permissions?.allow).toContain('Bash(rg:*)');
     });
 
     it('should have appropriate permissions in node template', () => {

@@ -30,7 +30,7 @@ describe('CLI Integration Tests', () => {
       ]);
 
       expect(stdout).toContain('利用可能なビルトインテンプレート');
-      expect(stdout).toContain('default');
+      expect(stdout).toContain('casual');
       expect(stdout).toContain('strict');
       expect(stdout).toContain('node');
       expect(stdout).toContain('Casual settings.');
@@ -46,7 +46,7 @@ describe('CLI Integration Tests', () => {
       ]);
 
       expect(stdout).toContain('設定ファイルが見つかりません');
-      expect(stdout).toContain('ccsettings apply --template default');
+      expect(stdout).toContain('ccsettings apply --template casual');
     });
 
     it('should show existing settings', async () => {
@@ -91,11 +91,11 @@ describe('CLI Integration Tests', () => {
         join(originalCwd, 'src/cli/index.ts'),
         'apply',
         '--template',
-        'default',
+        'casual',
         '--dry-run'
       ]);
 
-      expect(stdout).toContain('テンプレート "default" を読み込みました');
+      expect(stdout).toContain('テンプレート "casual" を読み込みました');
       expect(stdout).toContain('適用予定の変更');
       expect(stdout).toContain('追加される設定');
       expect(stdout).toContain('ドライランモード');
@@ -106,7 +106,7 @@ describe('CLI Integration Tests', () => {
         join(originalCwd, 'src/cli/index.ts'),
         'apply',
         '--template',
-        'default',
+        'casual',
         '--force'
       ]);
 
@@ -184,7 +184,7 @@ describe('CLI Integration Tests', () => {
         join(originalCwd, 'src/cli/index.ts'),
         'apply',
         '--template',
-        'default',
+        'casual',
         '--backup',
         '--force'
       ]);
@@ -205,14 +205,14 @@ describe('CLI Integration Tests', () => {
         join(originalCwd, 'src/cli/index.ts'),
         'apply',
         '--template',
-        'default',
+        'casual',
         '--template',
         'node',
         '--dry-run'
       ]);
 
       expect(stdout).toContain('2個のテンプレートを読み込みました:');
-      expect(stdout).toContain('default');
+      expect(stdout).toContain('casual');
       expect(stdout).toContain('node');
       expect(stdout).toContain('ドライランモード');
     });
@@ -258,14 +258,14 @@ describe('CLI Integration Tests', () => {
         join(originalCwd, 'src/cli/index.ts'),
         'apply',
         '--template',
-        'default',
+        'casual',
         '--file',
         join(tempDir, 'custom-template.json'),
         '--dry-run'
       ]);
 
       expect(stdout).toContain('2個のテンプレートを読み込みました:');
-      expect(stdout).toContain('default');
+      expect(stdout).toContain('casual');
       expect(stdout).toContain('custom');
       expect(stdout).toContain('env.CUSTOM_VAR: test');
     });

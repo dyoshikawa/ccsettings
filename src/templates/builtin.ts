@@ -5,8 +5,8 @@ import type { Template } from "../types/index.js";
 const BuiltinTemplatesSchema = z.record(z.string(), TemplateSchema);
 
 const rawBuiltinTemplates = {
-  default: {
-    name: "default",
+  casual: {
+    name: "casual",
     description: "Casual settings.",
     settings: {
       permissions: {
@@ -14,6 +14,7 @@ const rawBuiltinTemplates = {
           "Bash(git:*)",
           "Bash(gh:*)",
           "Bash(touch:*)",
+          "Bash(ls:*)",
           "Bash(mkdir:*)",
           "Bash(rg:*)",
           "Bash(grep:*)",
@@ -28,8 +29,8 @@ const rawBuiltinTemplates = {
           "Write(**)",
         ],
         deny: [
-          "Bash(rm -rf ~/**)",
-          "Bash(rm -rf //**)",
+          "Bash(rm -rf ~/)",
+          "Bash(rm -rf //)",
           "Bash(git remote add:*)",
           "Bash(git remote set-url:*)",
         ],
@@ -49,7 +50,7 @@ const rawBuiltinTemplates = {
       permissions: {
         allow: ["Bash(git:*)", "Bash(gh:*)", "Read(**)", "Edit(**)", "MultiEdit(**)", "Write(**)"],
         deny: [
-          "Bash(rm -rf ~/**)",
+          "Bash(rm -rf ~/)",
           "Bash(rm -rf //**)",
           "Bash(git remote add:*)",
           "Bash(git remote set-url:*)",
