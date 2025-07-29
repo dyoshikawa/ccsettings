@@ -64,7 +64,7 @@ export async function loadTemplate(
   filePath?: string,
   url?: string,
 ): Promise<Template> {
-  // Priority: URL > File > Template name > Default
+  // Priority: URL > File > Template name
   if (url) {
     return loadTemplateFromUrl(url);
   }
@@ -73,11 +73,14 @@ export async function loadTemplate(
     return loadTemplateFromFile(filePath);
   }
 
-  const name = templateName || "default";
-  const template = getBuiltinTemplate(name);
+  if (!templateName) {
+    throw new Error("Template name is required when no file path or URL is provided");
+  }
+
+  const template = getBuiltinTemplate(templateName);
 
   if (!template) {
-    throw new Error(`Built-in template not found: ${name}`);
+    throw new Error(`Built-in template not found: ${templateName}`);
   }
 
   return template;

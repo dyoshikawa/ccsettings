@@ -15,7 +15,7 @@ globs: ["**/*"]
 
 - **テンプレート適用**: プリセット、ローカルファイル、URLからテンプレートを適用
 - **スマートマージ**: 既存設定を保持しながらテンプレート設定を統合
-- **プリセット管理**: 組み込み設定テンプレート（default/strict/development/testing）
+- **プリセット管理**: 組み込み設定テンプレート（casual/strict/node）
 - **設定表示**: 現在の設定状態の確認
 - **バックアップ**: 変更前の設定の自動保存
 
@@ -54,7 +54,6 @@ src/
 ## コマンド仕様
 
 ### 基本コマンド
-- `ccsettings apply` - デフォルトテンプレートを適用
 - `ccsettings apply --template <name>` - 指定したプリセットを適用
 - `ccsettings apply --file <path>` - ローカルファイルから適用
 - `ccsettings apply --url <url>` - URLから適用
