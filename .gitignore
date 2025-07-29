@@ -216,3 +216,6 @@ test-*
 **/.augmentignore
 **/.augment/rules/
 **/.augment-guidelines
+
+**/.junie/guidelines.md
+**/.noai
