@@ -1,6 +1,6 @@
 {
 	"name": "ccsettings",
-	"version": "0.6.0",
+	"version": "0.7.0",
 	"description": "CLI tool for applying Claude Code configuration templates on a per-project basis",
 	"keywords": [
 		"claude-code",
