@@ -14,6 +14,7 @@ export interface ApplyOptions {
   dryRun?: boolean;
   backup?: boolean;
   force?: boolean;
+  local?: boolean;
 }
 
 export interface TemplateSource {

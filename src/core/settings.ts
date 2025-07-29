@@ -5,6 +5,7 @@ import type { ClaudeSettings } from "../types/index.js";
 
 const SETTINGS_DIR = ".claude";
 const SETTINGS_FILE = "settings.json";
+const LOCAL_SETTINGS_FILE = "settings.local.json";
 
 export async function findClaudeDirectory(): Promise<string | null> {
   let currentDir = process.cwd();
@@ -26,22 +27,23 @@ export async function findClaudeDirectory(): Promise<string | null> {
   return null;
 }
 
-export async function getSettingsPath(): Promise<string> {
+export async function getSettingsPath(isLocal?: boolean): Promise<string> {
   const claudeDir = await findClaudeDirectory();
+  const fileName = isLocal ? LOCAL_SETTINGS_FILE : SETTINGS_FILE;
 
   if (!claudeDir) {
     // If no .claude directory found, create one in current directory
     const currentClaudeDir = join(process.cwd(), SETTINGS_DIR);
     await fs.mkdir(currentClaudeDir, { recursive: true });
-    return join(currentClaudeDir, SETTINGS_FILE);
+    return join(currentClaudeDir, fileName);
   }
 
-  return join(claudeDir, SETTINGS_FILE);
+  return join(claudeDir, fileName);
 }
 
-export async function readSettings(): Promise<ClaudeSettings | null> {
+export async function readSettings(isLocal?: boolean): Promise<ClaudeSettings | null> {
   try {
-    const settingsPath = await getSettingsPath();
+    const settingsPath = await getSettingsPath(isLocal);
     const content = await fs.readFile(settingsPath, "utf-8");
     const data = JSON.parse(content);
     return ClaudeSettingsSchema.parse(data);
@@ -53,14 +55,14 @@ export async function readSettings(): Promise<ClaudeSettings | null> {
   }
 }
 
-export async function writeSettings(settings: ClaudeSettings): Promise<void> {
-  const settingsPath = await getSettingsPath();
+export async function writeSettings(settings: ClaudeSettings, isLocal?: boolean): Promise<void> {
+  const settingsPath = await getSettingsPath(isLocal);
   const validated = ClaudeSettingsSchema.parse(settings);
   await fs.writeFile(settingsPath, JSON.stringify(validated, null, 2), "utf-8");
 }
 
-export async function createBackup(): Promise<string> {
-  const settingsPath = await getSettingsPath();
+export async function createBackup(isLocal?: boolean): Promise<string> {
+  const settingsPath = await getSettingsPath(isLocal);
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
   const backupPath = settingsPath.replace(".json", `.backup-${timestamp}.json`);
 

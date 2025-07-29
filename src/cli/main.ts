@@ -20,7 +20,8 @@ export async function main(): Promise<void> {
     .option("-u, --url <url>", "Apply settings from URLs (can be specified multiple times)")
     .option("--dry-run", "Preview changes without applying them")
     .option("--backup", "Create a backup before applying changes")
-    .option("--force", "Apply changes without confirmation");
+    .option("--force", "Apply changes without confirmation")
+    .option("--local", "Apply settings to .claude/settings.local.json instead of settings.json");
 
   // Custom parsing for multiple templates
   let multipleTemplates: string[] | undefined;

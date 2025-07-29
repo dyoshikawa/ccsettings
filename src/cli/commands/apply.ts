@@ -22,7 +22,7 @@ export async function applyCommand(options: ApplyOptions): Promise<void> {
     }
 
     // Read existing settings
-    const existing = await readSettings();
+    const existing = await readSettings(options.local);
 
     // Create merge preview
     const { merged, changes } = createMultipleMergePreview(
@@ -32,7 +32,8 @@ export async function applyCommand(options: ApplyOptions): Promise<void> {
     );
 
     // Display preview
-    console.log("\n📋 適用予定の変更:");
+    const settingsType = options.local ? "ローカル設定" : "共有設定";
+    console.log(`\n📋 適用予定の変更 (${settingsType}):`);
     if (changes.added.length > 0) {
       console.log("\n🆕 追加される設定:");
       changes.added.forEach((change) => {
@@ -80,7 +81,7 @@ export async function applyCommand(options: ApplyOptions): Promise<void> {
     // Create backup if requested
     if (options.backup && existing) {
       try {
-        const backupPath = await createBackup();
+        const backupPath = await createBackup(options.local);
         console.log(`💾 バックアップを作成しました: ${backupPath}`);
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
@@ -89,8 +90,11 @@ export async function applyCommand(options: ApplyOptions): Promise<void> {
     }
 
     // Apply settings
-    await writeSettings(merged);
-    console.log("✅ 設定が正常に適用されました!");
+    await writeSettings(merged, options.local);
+    const successMessage = options.local
+      ? "✅ ローカル設定が正常に適用されました!"
+      : "✅ 設定が正常に適用されました!";
+    console.log(successMessage);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.error("❌ エラーが発生しました:", message);
