@@ -1,7 +1,7 @@
 import { listBuiltinTemplates } from "../../templates/builtin.js";
 
 export async function listCommand(): Promise<void> {
-  console.log("📋 利用可能なビルトインテンプレート:\n");
+  console.log("📋 Available builtin templates:\n");
 
   const templates = listBuiltinTemplates();
 
@@ -13,22 +13,22 @@ export async function listCommand(): Promise<void> {
       const { permissions } = template.settings;
 
       if (permissions.defaultMode) {
-        console.log(`   デフォルトモード: ${permissions.defaultMode}`);
+        console.log(`   Default mode: ${permissions.defaultMode}`);
       }
 
       if (permissions.allow && permissions.allow.length > 0) {
-        console.log(`   許可ルール数: ${permissions.allow.length}`);
+        console.log(`   Allow rules: ${permissions.allow.length}`);
       }
 
       if (permissions.deny && permissions.deny.length > 0) {
-        console.log(`   拒否ルール数: ${permissions.deny.length}`);
+        console.log(`   Deny rules: ${permissions.deny.length}`);
       }
     }
 
     console.log();
   });
 
-  console.log("💡 使用例:");
+  console.log("💡 Usage examples:");
   console.log("  ccsettings apply --template default");
   console.log("  ccsettings apply --template strict");
   console.log("  ccsettings apply --template node");

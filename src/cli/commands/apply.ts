@@ -7,15 +7,13 @@ import type { ApplyOptions } from "../../types/index.js";
 export async function applyCommand(options: ApplyOptions): Promise<void> {
   try {
     // Load templates
-    console.log("📥 テンプレートを読み込んでいます...");
+    console.log("📥 Loading templates...");
     const templates = await loadTemplates(options.template, options.file, options.url);
 
     if (templates.length === 1) {
-      console.log(
-        `✅ テンプレート "${templates[0]!.name}" を読み込みました: ${templates[0]!.description}`,
-      );
+      console.log(`✅ Loaded template "${templates[0]!.name}": ${templates[0]!.description}`);
     } else {
-      console.log(`✅ ${templates.length}個のテンプレートを読み込みました:`);
+      console.log(`✅ Loaded ${templates.length} templates:`);
       templates.forEach((template, index) => {
         console.log(`  ${index + 1}. "${template.name}": ${template.description}`);
       });
@@ -32,10 +30,10 @@ export async function applyCommand(options: ApplyOptions): Promise<void> {
     );
 
     // Display preview
-    const settingsType = options.local ? "ローカル設定" : "共有設定";
-    console.log(`\n📋 適用予定の変更 (${settingsType}):`);
+    const settingsType = options.local ? "local settings" : "shared settings";
+    console.log(`\n📋 Planned changes (${settingsType}):`);
     if (changes.added.length > 0) {
-      console.log("\n🆕 追加される設定:");
+      console.log("\n🆕 Settings to be added:");
       changes.added.forEach((change) => {
         const source = changes.templateSources?.get(change);
         const sourceText = source ? ` [from: ${source}]` : "";
@@ -44,7 +42,7 @@ export async function applyCommand(options: ApplyOptions): Promise<void> {
     }
 
     if (changes.modified.length > 0) {
-      console.log("\n✏️  変更される設定:");
+      console.log("\n✏️  Settings to be modified:");
       changes.modified.forEach((change) => {
         const source = changes.templateSources?.get(change);
         const sourceText = source ? ` [from: ${source}]` : "";
@@ -53,12 +51,12 @@ export async function applyCommand(options: ApplyOptions): Promise<void> {
     }
 
     if (changes.unchanged.length > 0) {
-      console.log("\n⏸️  保持される既存設定:");
+      console.log("\n⏸️  Existing settings to be preserved:");
       changes.unchanged.forEach((change) => console.log(`  = ${change}`));
     }
 
     if (options.dryRun) {
-      console.log("\n🔍 ドライランモード: 実際の変更は行われませんでした");
+      console.log("\n🔍 Dry-run mode: No actual changes were made");
       return;
     }
 
@@ -69,11 +67,11 @@ export async function applyCommand(options: ApplyOptions): Promise<void> {
         output: process.stdout,
       });
 
-      const answer = await rl.question("\n❓ 設定を適用しますか? (y/N): ");
+      const answer = await rl.question("\n❓ Apply settings? (y/N): ");
       rl.close();
 
       if (answer.toLowerCase() !== "y" && answer.toLowerCase() !== "yes") {
-        console.log("⏹️  適用がキャンセルされました");
+        console.log("⏹️  Application cancelled");
         return;
       }
     }
@@ -82,22 +80,22 @@ export async function applyCommand(options: ApplyOptions): Promise<void> {
     if (options.backup && existing) {
       try {
         const backupPath = await createBackup(options.local);
-        console.log(`💾 バックアップを作成しました: ${backupPath}`);
+        console.log(`💾 Backup created: ${backupPath}`);
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
-        console.warn(`⚠️  バックアップの作成に失敗しました: ${message}`);
+        console.warn(`⚠️  Failed to create backup: ${message}`);
       }
     }
 
     // Apply settings
     await writeSettings(merged, options.local);
     const successMessage = options.local
-      ? "✅ ローカル設定が正常に適用されました!"
-      : "✅ 設定が正常に適用されました!";
+      ? "✅ Local settings applied successfully!"
+      : "✅ Settings applied successfully!";
     console.log(successMessage);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    console.error("❌ エラーが発生しました:", message);
+    console.error("❌ An error occurred:", message);
     process.exit(1);
   }
 }

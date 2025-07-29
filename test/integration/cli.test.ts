@@ -29,7 +29,7 @@ describe('CLI Integration Tests', () => {
         'list'
       ]);
 
-      expect(stdout).toContain('利用可能なビルトインテンプレート');
+      expect(stdout).toContain('Available builtin templates');
       expect(stdout).toContain('casual');
       expect(stdout).toContain('strict');
       expect(stdout).toContain('node');
@@ -45,7 +45,7 @@ describe('CLI Integration Tests', () => {
         'show'
       ]);
 
-      expect(stdout).toContain('設定ファイルが見つかりません');
+      expect(stdout).toContain('Settings file not found');
       expect(stdout).toContain('ccsettings apply --template casual');
     });
 
@@ -75,12 +75,12 @@ describe('CLI Integration Tests', () => {
         'show'
       ]);
 
-      expect(stdout).toContain('現在のClaude Code設定');
-      expect(stdout).toContain('権限設定');
+      expect(stdout).toContain('Current Claude Code settings');
+      expect(stdout).toContain('Permission settings');
       expect(stdout).toContain('acceptEdits');
       expect(stdout).toContain('Read(src/**)');
       expect(stdout).toContain('Bash(rm -rf *)');
-      expect(stdout).toContain('環境変数');
+      expect(stdout).toContain('Environment variables');
       expect(stdout).toContain('NODE_ENV: development');
     });
   });
@@ -95,10 +95,10 @@ describe('CLI Integration Tests', () => {
         '--dry-run'
       ]);
 
-      expect(stdout).toContain('テンプレート "casual" を読み込みました');
-      expect(stdout).toContain('適用予定の変更');
-      expect(stdout).toContain('追加される設定');
-      expect(stdout).toContain('ドライランモード');
+      expect(stdout).toContain('Loaded template "casual"');
+      expect(stdout).toContain('Planned changes');
+      expect(stdout).toContain('Settings to be added');
+      expect(stdout).toContain('Dry-run mode');
     });
 
     it('should apply template with force flag', async () => {
@@ -110,7 +110,7 @@ describe('CLI Integration Tests', () => {
         '--force'
       ]);
 
-      expect(stdout).toContain('設定が正常に適用されました');
+      expect(stdout).toContain('Settings applied successfully');
 
       // Verify settings file was created
       const settingsPath = join(tempDir, '.claude', 'settings.json');
@@ -148,7 +148,7 @@ describe('CLI Integration Tests', () => {
         '--force'
       ]);
 
-      expect(stdout).toContain('設定が正常に適用されました');
+      expect(stdout).toContain('Settings applied successfully');
 
       // Verify merged settings
       const settingsContent = await fs.readFile(join(claudeDir, 'settings.json'), 'utf-8');
@@ -189,8 +189,8 @@ describe('CLI Integration Tests', () => {
         '--force'
       ]);
 
-      expect(stdout).toContain('バックアップを作成しました');
-      expect(stdout).toContain('設定が正常に適用されました');
+      expect(stdout).toContain('Backup created');
+      expect(stdout).toContain('Settings applied successfully');
 
       // Verify backup file exists
       const files = await fs.readdir(claudeDir);
@@ -211,10 +211,10 @@ describe('CLI Integration Tests', () => {
         '--dry-run'
       ]);
 
-      expect(stdout).toContain('2個のテンプレートを読み込みました:');
+      expect(stdout).toContain('Loaded 2 templates:');
       expect(stdout).toContain('casual');
       expect(stdout).toContain('node');
-      expect(stdout).toContain('ドライランモード');
+      expect(stdout).toContain('Dry-run mode');
     });
 
     it('should apply multiple templates with source tracking', async () => {
@@ -228,7 +228,7 @@ describe('CLI Integration Tests', () => {
         '--dry-run'
       ]);
 
-      expect(stdout).toContain('2個のテンプレートを読み込みました:');
+      expect(stdout).toContain('Loaded 2 templates:');
       expect(stdout).toContain('[from: strict]');
       expect(stdout).toContain('[from: node]');
     });
@@ -264,7 +264,7 @@ describe('CLI Integration Tests', () => {
         '--dry-run'
       ]);
 
-      expect(stdout).toContain('2個のテンプレートを読み込みました:');
+      expect(stdout).toContain('Loaded 2 templates:');
       expect(stdout).toContain('casual');
       expect(stdout).toContain('custom');
       expect(stdout).toContain('env.CUSTOM_VAR: test');

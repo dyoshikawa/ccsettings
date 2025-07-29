@@ -2,38 +2,38 @@ import { getSettingsPath, readSettings } from "../../core/settings.js";
 
 export async function showCommand(): Promise<void> {
   try {
-    console.log("📄 現在のClaude Code設定:\n");
+    console.log("📄 Current Claude Code settings:\n");
 
     const settings = await readSettings();
     const settingsPath = await getSettingsPath();
 
     if (!settings) {
-      console.log("❌ 設定ファイルが見つかりません");
-      console.log(`   予想パス: ${settingsPath}`);
-      console.log("\n💡 設定を作成するには:");
+      console.log("❌ Settings file not found");
+      console.log(`   Expected path: ${settingsPath}`);
+      console.log("\n💡 To create settings:");
       console.log("  ccsettings apply --template casual");
       return;
     }
 
-    console.log(`📍 設定ファイルパス: ${settingsPath}\n`);
+    console.log(`📍 Settings file path: ${settingsPath}\n`);
 
     // Permissions section
     if (settings.permissions) {
-      console.log("🔐 権限設定:");
+      console.log("🔐 Permission settings:");
 
       if (settings.permissions.defaultMode) {
-        console.log(`   デフォルトモード: ${settings.permissions.defaultMode}`);
+        console.log(`   Default mode: ${settings.permissions.defaultMode}`);
       }
 
       if (settings.permissions.allow && settings.permissions.allow.length > 0) {
-        console.log("   許可ルール:");
+        console.log("   Allow rules:");
         settings.permissions.allow.forEach((rule) => {
           console.log(`     ✅ ${rule}`);
         });
       }
 
       if (settings.permissions.deny && settings.permissions.deny.length > 0) {
-        console.log("   拒否ルール:");
+        console.log("   Deny rules:");
         settings.permissions.deny.forEach((rule) => {
           console.log(`     ❌ ${rule}`);
         });
@@ -43,7 +43,7 @@ export async function showCommand(): Promise<void> {
         settings.permissions.additionalDirectories &&
         settings.permissions.additionalDirectories.length > 0
       ) {
-        console.log("   追加ディレクトリ:");
+        console.log("   Additional directories:");
         settings.permissions.additionalDirectories.forEach((dir) => {
           console.log(`     📁 ${dir}`);
         });
@@ -54,7 +54,7 @@ export async function showCommand(): Promise<void> {
 
     // Environment variables
     if (settings.env && Object.keys(settings.env).length > 0) {
-      console.log("🌍 環境変数:");
+      console.log("🌍 Environment variables:");
       Object.entries(settings.env).forEach(([key, value]) => {
         console.log(`   ${key}: ${value}`);
       });
@@ -63,19 +63,19 @@ export async function showCommand(): Promise<void> {
 
     // Other settings
     if (settings.model) {
-      console.log(`🤖 モデル: ${settings.model}`);
+      console.log(`🤖 Model: ${settings.model}`);
     }
 
     if (settings.includeCoAuthoredBy !== undefined) {
-      console.log(`✍️  Co-authored-by: ${settings.includeCoAuthoredBy ? "有効" : "無効"}`);
+      console.log(`✍️  Co-authored-by: ${settings.includeCoAuthoredBy ? "enabled" : "disabled"}`);
     }
 
     if (settings.cleanupPeriodDays !== undefined) {
-      console.log(`🧹 ログ保持期間: ${settings.cleanupPeriodDays}日`);
+      console.log(`🧹 Log retention period: ${settings.cleanupPeriodDays} days`);
     }
 
     if (settings.hooks && Object.keys(settings.hooks).length > 0) {
-      console.log("\n🪝 フック設定:");
+      console.log("\n🪝 Hook settings:");
       Object.entries(settings.hooks).forEach(([hookType, hooks]) => {
         console.log(`   ${hookType}:`);
         if (typeof hooks === "object" && hooks !== null) {
@@ -89,7 +89,7 @@ export async function showCommand(): Promise<void> {
     }
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    console.error("❌ エラーが発生しました:", message);
+    console.error("❌ An error occurred:", message);
     process.exit(1);
   }
 }
